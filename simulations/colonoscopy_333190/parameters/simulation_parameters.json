@@ -1,0 +1,23 @@
+{
+    "SEED": 3000,
+    "CANCER_TREATMENT_COSTS": {
+        "I": 7647244,
+        "II": 11293221,
+        "III": 11567474,
+        "IV": 45414137
+    },
+    "SCREENING_FREQUENCY": [
+        "Biennial",
+        50,
+        75,
+        2,
+        0
+    ],
+    "COLONOSCOPY_COST": 333190,
+    "FIT_COST": 5865,
+    "CRC_PREVALENCE": 0.042,
+    "YEARS_TO_SIMULATE": 20,
+    "STARTING_YEAR": 2023,
+    "FIT_SENSITIVITY": 0.79,
+    "FIT_SPECIFICITY": 0.94
+}
