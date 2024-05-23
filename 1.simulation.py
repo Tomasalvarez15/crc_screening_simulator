@@ -287,10 +287,119 @@ if not os.path.exists('simulations/default'):
         default.simulate()
 
 
+        print("--- %s seconds ---" % int((time.time() - start_time)))
+else:
+    print('The default folder already exists')
+
+# Defaults
+# 1
+if not os.path.exists('simulations/default_1'):
+    for adherence_percentage in adherence_percentage_list:
+        default_1 = Population(adherence_percentage, 'default_1')
+        default_1.simulate()
+
+
         print("--- %s minutes ---" % int((time.time() - start_time)/60))
 else:
     print('The default folder already exists')
 
+# 2
+if not os.path.exists('simulations/default_2'):
+    for adherence_percentage in adherence_percentage_list:
+        default_2 = Population(adherence_percentage, 'default_2')
+        default_2.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default folder already exists')
+# 3
+if not os.path.exists('simulations/default_3'):
+    for adherence_percentage in adherence_percentage_list:
+        default_3 = Population(adherence_percentage, 'default_3')
+        default_3.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_3 folder already exists')
+
+# 4
+if not os.path.exists('simulations/default_4'):
+    for adherence_percentage in adherence_percentage_list:
+        default_4 = Population(adherence_percentage, 'default_4')
+        default_4.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_4 folder already exists')
+
+# 5
+if not os.path.exists('simulations/default_5'):
+    for adherence_percentage in adherence_percentage_list:
+        default_5 = Population(adherence_percentage, 'default_5')
+        default_5.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_5 folder already exists')
+
+# 6
+if not os.path.exists('simulations/default_6'):
+    for adherence_percentage in adherence_percentage_list:
+        default_6 = Population(adherence_percentage, 'default_6')
+        default_6.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_6 folder already exists')
+
+# 7
+if not os.path.exists('simulations/default_7'):
+    for adherence_percentage in adherence_percentage_list:
+        default_7 = Population(adherence_percentage, 'default_7')
+        default_7.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_7 folder already exists')
+
+# 8
+if not os.path.exists('simulations/default_8'):
+    for adherence_percentage in adherence_percentage_list:
+        default_8 = Population(adherence_percentage, 'default_8')
+        default_8.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_8 folder already exists')
+
+# 9
+if not os.path.exists('simulations/default_9'):
+    for adherence_percentage in adherence_percentage_list:
+        default_9 = Population(adherence_percentage, 'default_9')
+        default_9.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_9 folder already exists')
+
+# 10
+if not os.path.exists('simulations/default_10'):
+    for adherence_percentage in adherence_percentage_list:
+        default_10 = Population(adherence_percentage, 'default_10')
+        default_10.simulate()
+
+
+        print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The default_10 folder already exists')
 # I. Screening Frequency
 # 1. 1 year
 if not os.path.exists('simulations/1year'):
@@ -580,3 +689,43 @@ else:
     print('The super_improved_specificity folder already exists')
 
 print("--- %s minutes ---" % int((time.time() - start_time)/60))
+
+# VII. FIT Costs
+if not os.path.exists('simulations/fit_5865'):
+    fit_5865 = Population(0.8, 'fit_5865')
+    fit_5865.simulate()
+    print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The fit_5865 folder already exists')
+
+if not os.path.exists('simulations/fit_4865'):
+    fit_4865 = Population(0.8, 'fit_4865')
+    fit_4865.fit_cost_cost = 4865
+    fit_4865.simulate()
+    print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The interval fit_4865 folder already exists')
+
+if not os.path.exists('simulations/fit_3865'):
+    fit_3865 = Population(0.8, 'fit_3865')
+    fit_3865.fit_cost = 3865
+    fit_3865.simulate()
+    print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The fit_3865 folder already exists')
+
+if not os.path.exists('simulations/fit_6865'):
+    fit_6865 = Population(0.8, 'fit_6865')
+    fit_6865.fit_cost = 6865
+    fit_6865.simulate()
+    print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The fit_6865 folder already exists')
+
+if not os.path.exists('simulations/fit_2865'):
+    fit_2865 = Population(0.8, 'fit_2865')
+    fit_2865.fit_cost = 2865
+    fit_2865.simulate()
+    print("--- %s minutes ---" % int((time.time() - start_time)/60))
+else:
+    print('The fit_2865 folder already exists')

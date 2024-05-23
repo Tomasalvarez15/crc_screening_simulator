@@ -70,7 +70,7 @@ def costs_analysis():
     base_cost = costs.loc['ADH 0%']['Total Cost M CLP']
     print(base_cost)
     for f in file_names:
-        costs.loc[f[1],'Percentage Cost'] = costs.loc[f[1]]['Total Cost M CLP']/base_cost
+        costs.loc[f[1],'Percentage Cost'] = (costs.loc[f[1]]['Total Cost M CLP']-base_cost)/base_cost
         costs.loc[f[1],'DifferenceCosts'] = costs.loc[f[1]]['Total Cost M CLP'] - base_cost
 
     # Percentaje Cost as percentage string
@@ -189,11 +189,14 @@ def costs_analysis():
             ax[i, j].set_title(adherence)
             ax[i, j].set_ylabel('')
             total_cost_of_one_year = 0
+            if costs.loc[adherence, 'DifferenceCosts'] != 0:
+                costsDifferenceText = 'Cost Difference: ' + str(format_with_spaces(costs.loc[adherence, 'Percentage Cost'])) + '\n'
+            else:
+                costsDifferenceText = ''
             if costs.loc[adherence, 'YearsGained'] != 0:
                 total_cost_of_one_year = costs.loc[adherence, 'Total Cost M CLP']/costs.loc[adherence, 'YearsGained']
             ax[i, j].text(-1, -2, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP']))
-            + ' M CLP\nCosts Difference: ' + str(format_with_spaces(costs.loc[adherence, 'DifferenceCosts'])) 
-            + ' M CLP\nYears Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
+            + ' M CLP\n' + costsDifferenceText + 'Years Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
             ))
 
     # Make it horizontal
