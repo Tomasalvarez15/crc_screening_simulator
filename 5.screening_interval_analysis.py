@@ -9,11 +9,17 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
+        ['simulations/interval60_75/costs/costs_0_8.csv', '60-75\n(15)'],
+        ['simulations/interval50_70/costs/costs_0_8.csv', '50-70\n(20)'],
+        ['simulations/interval55_75/costs/costs_0_8.csv', '55-75\n(20)'],
         ['simulations/interval50_75/costs/costs_0_8.csv', '50-75\n(25)'],
-        ['simulations/interval55_80/costs/costs_0_8.csv', '55-80\n(25)'], 
+        ['simulations/interval55_80/costs/costs_0_8.csv', '55-80\n(25)'],
+        ['simulations/interval50_80/costs/costs_0_8.csv', '50-80\n(30)'], 
+        ['simulations/interval45_75/costs/costs_0_8.csv', '45-75\n(30)'],
         ['simulations/interval45_80/costs/costs_0_8.csv', '45-80\n(35)'], 
         ['simulations/interval40_85/costs/costs_0_8.csv', '40-85\n(45)'],
-        ['simulations/interval35_90/costs/costs_0_8.csv', '35-90\n(55)']]
+        ['simulations/interval35_90/costs/costs_0_8.csv', '35-90\n(55)']
+        ]
 
     costs = pd.DataFrame(columns=['Total Cost M CLP',
     'Percentage Cost', 'DifferenceCosts',
@@ -116,109 +122,7 @@ def costs_analysis():
 
     costs.to_csv('simulations/interval50_75/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pandas as pd
-    import seaborn as sns
-
-
-    # Make a graph bar with the symptomatic and asymptomatic treatments by the adherence percentage
-    # No subplots
-
-    fig, ax = plt.subplots()
-    adherences = costs.index
-    adherences = [x for x in adherences]
-    costs['AsymptomaticTreatmentsPercentage'] = costs['AsymptomaticTreatments']/costs['Treatments']
-    costs['SymptomaticTreatmentsPercentage'] = costs['SymptomaticTreatments']/costs['Treatments']
-    costs[['AsymptomaticTreatmentsPercentage', 'SymptomaticTreatmentsPercentage']].plot(kind='barh', ax=ax, stacked=True, color=['#1f77b4', '#ff7f0e'])
-    ax.set_title('Treatments by Screening Intervals')
-    ax.invert_yaxis()
-
-    # Set the legend in the upper right corner
-    ax.legend(loc='upper right', labels=['Asymptomatic', 'Symptomatic'])
-
-    # Put the asymptomatic percentage in the bars
-    for i, v in enumerate(costs['AsymptomaticTreatmentsPercentage']):
-        ax.text(v, i, '{:.2%}'.format(v), ha='left', va='center', fontsize=8)
     
-
-    plt.savefig('plots/screening_efficacy_by_interval.png')
-
-
-    fig, ax = plt.subplots(1, 5, figsize=(11, 7))
-    #fig.position = (0, 6)
-    adherences = costs.index
-    adherences = [x for x in adherences]
-    for i in range(5):
-        adherence = adherences[i]
-        costs.loc[adherence, ['StageI', 'StageII', 'StageIII', 'StageIV']].plot(kind='bar', ax=ax[i], stacked=True)
-        ax[i].set_title(adherence, fontsize=10)
-        ax[i].set_xticklabels(['I', 'II', 'III', 'IV'], rotation=0)
-        ax[i].set_ylim(0, 40000)
-
-        # Put the values in the top of the bars as integers
-        for p in ax[i].patches:
-            ax[i].annotate(str(int(p.get_height())), (p.get_x() * 0.93, p.get_height() * 1.015), fontsize=10)
-
-        # Add the total number of FIT and Colonoscopy at the bottom of each graph
-        ax[i].text(-0.5, -2800, 'FIT: ' + str(format_with_spaces(int(costs.loc[adherence, 'FIT']))), fontsize=10)
-        ax[i].text(-0.5, -4000, 'Colonoscopies: ' + str(format_with_spaces(int(costs.loc[adherence, 'Colonoscopy']))), fontsize=10)
-
-
-    # Add text with PARAMETERS
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    fig.text(0.5, 0.95, 'FIT Sensitivity: ' + str(FIT_SENSITIVITY) + ' FIT Specificity: ' + str(FIT_SPECIFICITY)
-    + ' Years: ' + str(YEARS_TO_SIMULATE) + ' Prevalence: ' + str(CRC_PREVALENCE),
-    ha='center', va='center', fontsize=10, bbox=props)
-
-    #plt.subplots_adjust(hspace=0.5, wspace=0.5, top=0.8)
-    plt.subplots_adjust(hspace=0.4, wspace=0.5)
-    plt.savefig('plots/treatments_by_interval.png')
-
-
-    # Make multiple pie graphs with all the costs: FIT, Colonoscopy, Stage I, Stage II, Stage III, Stage IV
-    # Add the total cost at the bottom of each pie graph
-
-    #to add percentages
-    def my_autopct(pct):
-        return ('%1.1f%%' % pct) if pct > 5 else ''
-
-
-    fig, ax = plt.subplots(1, 5)
-    fig.set_size_inches(12, 6)
-    adherences = costs.index
-    adherences = [x for x in adherences]
-    for i in range(5):
-        adherence = adherences[i]
-        #Only show pct if it is higher than 5%
-
-        #costs.loc[adherence, ['FIT Costs', 'Colonoscopy Costs', 'Stage I Costs', 'Stage II Costs', 'Stage III Costs', 'Stage IV Costs']].plot(kind='pie', ax=ax[i], autopct='%1.1f%%', startangle=90, legend=False, labels=None)
-        costs.loc[adherence, ['FIT Costs', 'Colonoscopy Costs', 'Stage I Costs', 'Stage II Costs', 'Stage III Costs', 'Stage IV Costs']].plot(kind='pie', ax=ax[i], startangle=90, legend=False, autopct=my_autopct, labels=None, fontsize=8, pctdistance=0.7)
-
-
-        total_cost_of_one_year = costs.loc[adherence, 'Total Cost M CLP']/costs.loc[adherence, 'YearsGained']
-        ax[i].set_title(adherence)
-        ax[i].set_ylabel('')
-        ax[i].text(-1, -2, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP'])) + ' M CLP'
-        + '\n Cost Difference ' + str(format_with_spaces(costs.loc[adherence, 'DifferenceCosts'])) + ' M CLP'
-        + '\nYears Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained'])))
-        + '\n Total Cost/Years Gained: \n' +  str(round(total_cost_of_one_year, 3)) +  ' M CLP per year'
-        , fontsize=10)
-
-    # Make it horizontal
-    fig.legend(loc=(0.15,0.837), labels=costs.columns[3:9], title='Costs', ncols=2 )
-
-    # Add text with PARAMETERS
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    fig.text(0.7, 0.91, 'FIT Sensitivity: ' + str(FIT_SENSITIVITY) + ' FIT Specificity: ' + str(FIT_SPECIFICITY) 
-    + ' \nPeriod: ' + str(STARTING_YEAR) + '-' + str(STARTING_YEAR+YEARS_TO_SIMULATE) + ' Prevalence: ' + str(CRC_PREVALENCE)
-    + ' \n Adherence: 80' + str('%') + ' FIT Cost: '  + str(format_with_spaces(FIT_COST)) + ' CLP'
-    + ' \n Colonoscopy Cost: ' + str(format_with_spaces(COLONOSCOPY_COST)) + ' CLP'
-    + ' \n Avg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
-    ha='center', va='center', fontsize=10, bbox=props)
-
-    plt.savefig('plots/costs_interval.png', dpi=600)
-    #plt.show()
     
 
 costs_analysis()

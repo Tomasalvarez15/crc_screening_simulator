@@ -1,4 +1,5 @@
 # Both from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3415614/ Table 4
+# ORIGINAL
 cancer_life_expectancy_by_stage = {
     'male': {'I': 25.3, 'II': 19.2, 'III': 13.6, 'IV': 2.1},
     'female': {'I': 29.8, 'II': 20.9, 'III': 16.8, 'IV': 2.2}
@@ -6,8 +7,40 @@ cancer_life_expectancy_by_stage = {
 
 cancer_life_expectancy_by_age = {
     'male': [(50, 12.3), (65, 9.4), (85, 5.5)],
-    'female': [(50, 13.3), (65, 11.5), (85, 4.1)]
+    'female': [(50, 13.3), (65, 11.5), (85, 7.0)]
 }
+
+# New Life Expectancy
+cancer_life_expectancy_by_stage2 = {
+    'LE': {
+        'male': {'I': 25.3, 'II': 19.2, 'III': 13.6, 'IV': 2.1},
+        'female': {'I': 29.8, 'II': 20.9, 'III': 16.8, 'IV': 2.2}
+    },
+    'HLE': {
+        'male': {'I': 19.1, 'II': 16.0, 'III': 10.7, 'IV': 1.0},
+        'female': {'I': 21.1, 'II': 15.8, 'III': 12.9, 'IV': 0.9}
+    },
+    'DFLE': {
+        'male': {'I': 19.2, 'II': 14.5, 'III': 11.3, 'IV': 1.1},
+        'female': {'I': 21.3, 'II': 15.4, 'III': 11.9, 'IV': 1.2}
+    }
+}
+
+cancer_life_expectancy_by_age2 = {
+    'LE': {
+        'male': [(50, 12.3), (65, 9.4), (85, 5.5)],
+        'female': [(50, 13.3), (65, 11.5), (85, 7.0)]
+    },
+    'HLE': {
+        'male': [(50, 9.5), (65, 7.3), (85, 3.8)],
+        'female': [(50, 9.9), (65, 7.9), (85, 4.1)]
+    },
+    'DFLE': {
+        'male': [(50, 9.5), (65, 6.3), (85, 3.2)],
+        'female': [(50, 9.8), (65, 6.6), (85, 2.6)]
+    }
+}
+
 
 
 def new_interpolate(value, points):
@@ -37,7 +70,7 @@ def calculate_age_weight(age):
     return 0.2 + 0.8 * ((age - 0) / 120)
     #return  age / 120
 
-def cancer_life_expectancy_function(age, stage, sex):
+def cancer_life_expectancy_function(age, stage, sex, le_type='LE'):
     # Define the data
     age_data = cancer_life_expectancy_by_age[sex]
     stage_data = cancer_life_expectancy_by_stage[sex]
@@ -71,6 +104,7 @@ def get_crc_life_expectancies():
     }
     for j in etapas:
         for i in range(120):
+            #for le_type in ['LE', 'HLE', 'DFLE']:
             life_expectancies['male'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'male')
             life_expectancies['female'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'female')
     return life_expectancies
@@ -107,6 +141,30 @@ def test_life_expectancy():
 
     plt.legend()
 
-    plt.savefig('crc_life_expectancies.png')
+    plt.savefig('crc_male_life_expectancies.png')
+
+    # Make the same plot but for female life expectancies
+
+    plt.clf()
+
+    for stage, ages in life_expectancies['female'].items():
+        plt.plot(list(ages.keys()), list(ages.values()), label=stage)
+    
+    plt.xlabel('Age')
+
+    plt.ylabel('Life expectancy')
+
+    # Put a line at 50 and 75
+    plt.axvline(x=50, color='k', linestyle='--')
+
+    plt.axvline(x=75, color='k', linestyle='--')
+
+    # Write a text that says "Screening interval" between 50 and 75
+    plt.text(45, 26, 'Screening interval')
+
+
+    plt.legend()
+
+    plt.savefig('crc_female_life_expectancies.png')
 
 test_life_expectancy()

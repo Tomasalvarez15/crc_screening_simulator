@@ -79,10 +79,12 @@ def costs_analysis():
     
     base_cost = costs.loc['Average\nColonoscopy Cost\n421 005 CLP']['Total Cost M CLP']
     for f in file_names:
-        costs.loc[f[1],'Percentage Cost'] = costs.loc[f[1]]['Total Cost M CLP']/base_cost
+        costs.loc[f[1],'Percentage Cost'] = (costs.loc[f[1]]['Total Cost M CLP']-base_cost)/base_cost
         costs.loc[f[1],'DifferenceCosts'] = costs.loc[f[1]]['Total Cost M CLP'] - base_cost
 
 
+    # Percentaje Cost as percentage string
+    costs['Percentage Cost'] = costs['Percentage Cost'].apply(lambda x: '{:.2%}'.format(x))
     # Treaments as ints
     costs['Cancer Treatments'] = costs['Treatments'].apply(lambda x: int(x))
     costs['StageI'] = costs['StageI'].apply(lambda x: int(x))
@@ -128,9 +130,13 @@ def costs_analysis():
         
         ax[i].set_title(adherence)
         ax[i].set_ylabel('')
+        if costs.loc[adherence, 'DifferenceCosts'] != 0:
+            costsDifferenceText = 'Cost Difference: ' + str(format_with_spaces(costs.loc[adherence, 'Percentage Cost'])) + '\n'
+        else:
+            costsDifferenceText = ''
         ax[i].text(-1, -2, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP'])) + ' M CLP'
         + '\nColonoscopy Costs: ' + str(format_with_spaces(int(costs.loc[adherence, 'Colonoscopy Costs'])) + ' M CLP'
-        + '\nCost Difference: ' + str(format_with_spaces(costs.loc[adherence, 'DifferenceCosts'])) + ' M CLP'
+        + '\n' + costsDifferenceText
         ), fontsize=10)
 
     # Make it horizontal
