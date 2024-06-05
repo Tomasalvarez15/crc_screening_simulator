@@ -27,7 +27,8 @@ def costs_analysis():
     'Stage I Costs','Stage II Costs','Stage III Costs','Stage IV Costs',
     'Treatments', 'StageI', 'StageII', 'StageIII', 'StageIV',
     'StageI%', 'StageII%', 'StageIII%', 'StageIV%', 
-    'YearsGained', 'AsymptomaticTreatments', 'SymptomaticTreatments'])
+    'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained',
+    'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
     file_path = 'simulations/1year/parameters/simulation_parameters.json'
@@ -71,6 +72,9 @@ def costs_analysis():
         cancer_stage_III_pct = cancer_stage_III_treatments/cancer_treatments
         cancer_stage_IV_pct = cancer_stage_IV_treatments/cancer_treatments
         years_gained = table['YearsGained'].sum()
+        healthy_years_gained = table['HYearsGained'].sum()
+        disability_free_years_gained = table['DFYearsGained'].sum()
+        daly_gained = table['DALYGained'].sum()
         asymptomatic_treatments = table['AsymtomaticCCRDiscovered'].sum()
         symptomatic_treatments = cancer_treatments - asymptomatic_treatments
         costs.loc[f[1]] = {'Total Cost M CLP': total_cost, 
@@ -81,7 +85,8 @@ def costs_analysis():
         'Treatments': cancer_treatments, 
         'StageI': cancer_stage_I_treatments, 'StageII': cancer_stage_II_treatments, 'StageIII': cancer_stage_III_treatments, 'StageIV': cancer_stage_IV_treatments,
         'StageI%': cancer_stage_I_pct, 'StageII%': cancer_stage_II_pct, 'StageIII%': cancer_stage_III_pct, 'StageIV%': cancer_stage_IV_pct, 
-        'YearsGained': years_gained, 'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
+        'YearsGained': years_gained, 'HYearsGained': healthy_years_gained, 'DFYearsGained': disability_free_years_gained, 'DALYGained': daly_gained,
+        'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
 
     print(costs.head)
     # Set the base cost as the Total Cost M CLP of the lowest default
@@ -90,6 +95,8 @@ def costs_analysis():
     for f in file_names:
         if costs.loc[f[1]]['Total Cost M CLP'] < base_cost:
             base_cost = costs.loc[f[1]]['Total Cost M CLP']
+    
+
     for f in file_names:
         costs.loc[f[1],'Percentage Cost'] = (costs.loc[f[1]]['Total Cost M CLP']-base_cost)/base_cost
         costs.loc[f[1],'DifferenceCosts'] = costs.loc[f[1]]['Total Cost M CLP'] - base_cost
@@ -128,7 +135,6 @@ def costs_analysis():
     print('PAAAAN')
     print(costs[['AsymptomaticTreatmentsPercentage', 'SymptomaticTreatmentsPercentage']])
     costs[['AsymptomaticTreatmentsPercentage', 'SymptomaticTreatmentsPercentage']].plot(kind='barh', ax=ax, stacked=True, color=['#1f77b4', '#ff7f0e'])
-    ax.set_title('Treatments by Adherence')
     ax.invert_yaxis()
 
     # Set the legend in the upper right corner
@@ -214,12 +220,16 @@ def costs_analysis():
                 costsDifferenceText = 'Cost Difference: ' + str(format_with_spaces(costs.loc[adherence, 'Percentage Cost'])) + '\n'
             else:
                 costsDifferenceText = ''
+            MCLP_per_DALY = ''
             if costs.loc[adherence, 'YearsGained'] != 0:
                 total_cost_of_one_year = costs.loc[adherence, 'Total Cost M CLP']/costs.loc[adherence, 'YearsGained']
+                MCLP_per_DALY = '\nCost per DALY: ' + str(round(costs.loc[adherence, 'DifferenceCosts']/costs.loc[adherence, 'DALYGained'], 2)) + ' M CLP'
             ax[i, j].text(-1, -2, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP']))
             + ' M CLP\n' + costsDifferenceText
-            +  'Years Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
-            ))
+            #+  'Years Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
+            + 'DALYs gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'DALYGained'])))
+            #+ MCLP_per_DALY
+            )
 
     # Make it horizontal
     fig.legend(loc=(0.15,0.877), labels=[ 

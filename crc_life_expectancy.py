@@ -1,17 +1,17 @@
 # Both from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3415614/ Table 4
 # ORIGINAL
-cancer_life_expectancy_by_stage = {
+cancer_life_expectancy_by_stage_old = {
     'male': {'I': 25.3, 'II': 19.2, 'III': 13.6, 'IV': 2.1},
     'female': {'I': 29.8, 'II': 20.9, 'III': 16.8, 'IV': 2.2}
 }
 
-cancer_life_expectancy_by_age = {
+cancer_life_expectancy_by_age_old = {
     'male': [(50, 12.3), (65, 9.4), (85, 5.5)],
     'female': [(50, 13.3), (65, 11.5), (85, 7.0)]
 }
 
 # New Life Expectancy
-cancer_life_expectancy_by_stage2 = {
+cancer_life_expectancy_by_stage = {
     'LE': {
         'male': {'I': 25.3, 'II': 19.2, 'III': 13.6, 'IV': 2.1},
         'female': {'I': 29.8, 'II': 20.9, 'III': 16.8, 'IV': 2.2}
@@ -26,7 +26,7 @@ cancer_life_expectancy_by_stage2 = {
     }
 }
 
-cancer_life_expectancy_by_age2 = {
+cancer_life_expectancy_by_age = {
     'LE': {
         'male': [(50, 12.3), (65, 9.4), (85, 5.5)],
         'female': [(50, 13.3), (65, 11.5), (85, 7.0)]
@@ -72,8 +72,8 @@ def calculate_age_weight(age):
 
 def cancer_life_expectancy_function(age, stage, sex, le_type='LE'):
     # Define the data
-    age_data = cancer_life_expectancy_by_age[sex]
-    stage_data = cancer_life_expectancy_by_stage[sex]
+    age_data = cancer_life_expectancy_by_age[le_type][sex]
+    stage_data = cancer_life_expectancy_by_stage[le_type][sex]
     
     # Interpolate life expectancy based on age
     age_le = new_interpolate(age, age_data)
@@ -99,14 +99,27 @@ def cancer_life_expectancy_function(age, stage, sex, le_type='LE'):
 def get_crc_life_expectancies():
     etapas = ['I', 'II', 'III', 'IV']
     life_expectancies = {
-        'male': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}},
-        'female': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}}
+        'LE': 
+        {
+            'male': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}},
+            'female': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}}
+        },
+        'HLE':
+        {
+            'male': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}},
+            'female': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}}
+        },
+        'DFLE':
+        {
+            'male': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}},
+            'female': { 'I': {}, 'II': {}, 'III': {}, 'IV': {}}
+        }
     }
     for j in etapas:
         for i in range(120):
-            #for le_type in ['LE', 'HLE', 'DFLE']:
-            life_expectancies['male'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'male')
-            life_expectancies['female'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'female')
+            for le_type in ['LE', 'HLE', 'DFLE']:
+                life_expectancies[le_type]['male'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'male', le_type)
+                life_expectancies[le_type]['female'][j][i + 1] = cancer_life_expectancy_function(i + 1, j, 'female', le_type)
     return life_expectancies
 
 def test_life_expectancy():
@@ -117,7 +130,7 @@ def test_life_expectancy():
 
     import matplotlib.pyplot as plt
 
-    for stage, ages in life_expectancies['male'].items():
+    for stage, ages in life_expectancies['LE']['male'].items():
         plt.plot(list(ages.keys()), list(ages.values()), label=stage)
 
 
@@ -147,8 +160,10 @@ def test_life_expectancy():
 
     plt.clf()
 
-    for stage, ages in life_expectancies['female'].items():
+    for stage, ages in life_expectancies['LE']['female'].items():
         plt.plot(list(ages.keys()), list(ages.values()), label=stage)
+
+
     
     plt.xlabel('Age')
 
@@ -166,5 +181,69 @@ def test_life_expectancy():
     plt.legend()
 
     plt.savefig('crc_female_life_expectancies.png')
+
+    # Plot the three types of life expectancies for males in three subplots
+
+    plt.clf()
+
+    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
+
+    for i, le_type in enumerate(['LE', 'HLE', 'DFLE']):
+        for stage, ages in life_expectancies[le_type]['male'].items():
+            axs[i].plot(list(ages.keys()), list(ages.values()), label=stage)
+
+        axs[i].set_xlabel('Age')
+
+        axs[i].set_ylabel('Life expectancy')
+
+        axs[i].set_title(le_type)
+
+        # Set y limit to 0 - 25
+        axs[i].set_ylim(0, 25)
+
+        # Set x limit to 45 - 80
+        axs[i].set_xlim(45, 80)
+
+        # Put a line at 50 and 75
+        axs[i].axvline(x=50, color='k', linestyle='--')
+
+        axs[i].axvline(x=75, color='k', linestyle='--')
+
+        axs[i].legend()
+
+    plt.savefig('crc_male_life_expectancies_all.png')
+
+    # Plot the three types of life expectancies for females in three subplots
+
+    plt.clf()
+
+    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
+
+    for i, le_type in enumerate(['LE', 'HLE', 'DFLE']):
+        for stage, ages in life_expectancies[le_type]['female'].items():
+            axs[i].plot(list(ages.keys()), list(ages.values()), label=stage)
+
+        axs[i].set_xlabel('Age')
+
+        axs[i].set_ylabel('Life expectancy')
+
+        axs[i].set_title(le_type)
+
+        # Set y limit to 0 - 25
+        axs[i].set_ylim(0, 25)
+
+        # Set x limit to 45 - 80
+
+        axs[i].set_xlim(45, 80)
+
+        # Put a line at 50 and 75
+
+        axs[i].axvline(x=50, color='k', linestyle='--')
+
+        axs[i].axvline(x=75, color='k', linestyle='--')
+
+        axs[i].legend()
+
+    plt.savefig('crc_female_life_expectancies_all.png')
 
 test_life_expectancy()

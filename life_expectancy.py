@@ -105,4 +105,6 @@ def get_male_life_expectancy_plot():
     plt.savefig('plots/life_expectancy.png')
 
 get_male_life_expectancy_plot()
+
+print(get_female_life_expectancy_dictionary())
     

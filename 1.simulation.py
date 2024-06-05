@@ -47,9 +47,9 @@ class Population():
     # Starts the simulation
     def simulate(self):
         for i in range(110):
-            year_of_birth = self.year
+            year_of_inscription = self.year
             for j in range(int(initial_population_dict[i][1])):
-                self.population.append(Person(i, year_of_birth, self.adherence_percentage, self.counter, self.crc_prevalence))
+                self.population.append(Person(i, year_of_inscription, self.adherence_percentage, self.counter, self.crc_prevalence))
                 self.counter += 1
          
         self.census = pd.DataFrame([[i, 0] for i in range(120)], columns=['Edad', str(self.year)])
@@ -78,8 +78,8 @@ class Population():
         total_cost = yearly_fit_cost + yearly_colonoscopy_cost + cancer_stage_I_cost + cancer_stage_II_cost + cancer_stage_III_cost + cancer_stage_IV_cost
         self.costs = pd.concat(
             [self.costs, 
-            pd.DataFrame([[self.year, fit, colonoscopy, yearly_fit_cost, yearly_colonoscopy_cost, self.yearly_stage_I_treatments, self.yearly_stage_II_treatments, self.yearly_stage_III_treatments, self.yearly_stage_IV_treatments, cancer_stage_I_cost, cancer_stage_II_cost, cancer_stage_III_cost, cancer_stage_IV_cost, cancer_treatments, total_cancer_treatment_costs, total_cost, self.expectancy_years_gained, self.asymptomatic_ccr_discovered]],
-            columns=['Year', 'Fit', 'Colonoscopy', 'Fit Costs', 'Colonoscopy Costs', 'CancerStageITreatments', 'CancerStageIITreatments', 'CancerStageIIITreatments', 'CancerStageIVTreatments', 'CancerStageI', 'CancerStageII', 'CancerStageIII', 'CancerStageIV', 'Cancer Treatments', 'Cancer Treatments Costs', 'Total', 'YearsGained', 'AsymtomaticCCRDiscovered'])], 
+            pd.DataFrame([[self.year, fit, colonoscopy, yearly_fit_cost, yearly_colonoscopy_cost, self.yearly_stage_I_treatments, self.yearly_stage_II_treatments, self.yearly_stage_III_treatments, self.yearly_stage_IV_treatments, cancer_stage_I_cost, cancer_stage_II_cost, cancer_stage_III_cost, cancer_stage_IV_cost, cancer_treatments, total_cancer_treatment_costs, total_cost, self.expectancy_years_gained, self.healthy_expectancy_years_gained, self.disability_free_expectancy_years_gained, self.daly_gained ,self.asymptomatic_ccr_discovered]],
+            columns=['Year', 'Fit', 'Colonoscopy', 'Fit Costs', 'Colonoscopy Costs', 'CancerStageITreatments', 'CancerStageIITreatments', 'CancerStageIIITreatments', 'CancerStageIVTreatments', 'CancerStageI', 'CancerStageII', 'CancerStageIII', 'CancerStageIV', 'Cancer Treatments', 'Cancer Treatments Costs', 'Total', 'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained', 'AsymtomaticCCRDiscovered'])], 
             ignore_index=True
             )
         
@@ -105,6 +105,9 @@ class Population():
         self.yearly_stage_III_treatments = 0
         self.yearly_stage_IV_treatments = 0
         self.expectancy_years_gained = 0
+        self.healthy_expectancy_years_gained = 0
+        self.disability_free_expectancy_years_gained = 0
+        self.daly_gained = 0
         self.asymptomatic_ccr_discovered = 0
         # Count the population by age
         for i in self.population:
@@ -126,8 +129,8 @@ class Population():
         
         self.population_stats = pd.concat(
             [self.population_stats, 
-            pd.DataFrame([[self.year, len(self.population), nacimientos + nacimientos2 + nacimientos3, self.yearly_deaths, self.yearly_cancer_deaths, poblacion50_75, self.yearly_people_with_cancer, self.yearly_screened, self.yearly_true_positives, self.yearly_false_positives, self.yearly_symptomatic_cancer_treatments, self.yearly_asymptomatic_cancer_treatments, self.yearly_stage_I_treatments, self.yearly_stage_II_treatments, self.yearly_stage_III_treatments, self.yearly_stage_IV_treatments, self.expectancy_years_gained, self.asymptomatic_ccr_discovered]], 
-            columns=['Year', 'Total', 'Births', 'Deaths', 'DeathsByCancer', '50-75', 'HaveCancer', 'Screened', 'TruePositives', 'FalsePositives', 'SymptomaticTreatments', 'AsymptomaticTreatments', 'StageITreatments', 'StageIITreatments', 'StageIIITreatments', 'StageIVTreatments', 'YearsGained', 'AsymtomaticCCRDiscovered'])], 
+            pd.DataFrame([[self.year, len(self.population), nacimientos + nacimientos2 + nacimientos3, self.yearly_deaths, self.yearly_cancer_deaths, poblacion50_75, self.yearly_people_with_cancer, self.yearly_screened, self.yearly_true_positives, self.yearly_false_positives, self.yearly_symptomatic_cancer_treatments, self.yearly_asymptomatic_cancer_treatments, self.yearly_stage_I_treatments, self.yearly_stage_II_treatments, self.yearly_stage_III_treatments, self.yearly_stage_IV_treatments, self.expectancy_years_gained, self.healthy_expectancy_years_gained, self.disability_free_expectancy_years_gained, self.daly_gained, self.asymptomatic_ccr_discovered]], 
+            columns=['Year', 'Total', 'Births', 'Deaths', 'DeathsByCancer', '50-75', 'HaveCancer', 'Screened', 'TruePositives', 'FalsePositives', 'SymptomaticTreatments', 'AsymptomaticTreatments', 'StageITreatments', 'StageIITreatments', 'StageIIITreatments', 'StageIVTreatments', 'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained', 'AsymtomaticCCRDiscovered'])], 
             ignore_index=True
             )
         
@@ -189,7 +192,11 @@ class Population():
                     if person.detectable_cancer == True:
                         if uniform(0,1) < self.fit_sensitivity:
                             person.treat_cancer()
-                            self.expectancy_years_gained += person.asymptomatic_screening()
+                            years_gained, healthy_years_gained, disability_free_years_gained, daly_gained = person.asymptomatic_screening()
+                            self.expectancy_years_gained += years_gained
+                            self.healthy_expectancy_years_gained += healthy_years_gained
+                            self.disability_free_expectancy_years_gained += disability_free_years_gained
+                            self.daly_gained += daly_gained
                             self.asymptomatic_ccr_discovered += 1
                             self.yearly_true_positives += 1
                             self.yearly_colonoscopies += 1
@@ -290,6 +297,17 @@ if not os.path.exists('simulations/default'):
         print("--- %s seconds ---" % int((time.time() - start_time)))
 else:
     print('The default folder already exists')
+
+if not os.path.exists('simulations/default200'):
+    for adherence_percentage in adherence_percentage_list:
+        default = Population(adherence_percentage, 'default200')
+        default.years_to_simulate = 200
+        default.simulate()
+
+
+        print("--- %s seconds ---" % int((time.time() - start_time)))
+else:
+    print('The default200 folder already exists')
 
 # Defaults
 # 1

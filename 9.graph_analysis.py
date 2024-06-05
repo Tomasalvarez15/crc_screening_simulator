@@ -16,8 +16,9 @@ def costs_analysis():
     'FIT Costs', 'Colonoscopy Costs', 
     'Stage I Costs','Stage II Costs','Stage III Costs','Stage IV Costs',
     'Treatments', 'StageI', 'StageII', 'StageIII', 'StageIV',
-    'StageI%', 'StageII%', 'StageIII%', 'StageIV%', 
-    'YearsGained', 'AsymptomaticTreatments', 'SymptomaticTreatments'])
+    'StageI%', 'StageII%', 'StageIII%', 'StageIV%',
+    'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained',
+    'AsymptomaticTreatments', 'SymptomaticTreatments'])
     import json
 
     # Path to your JSON file
@@ -52,6 +53,9 @@ def costs_analysis():
         cancer_stage_III_pct = cancer_stage_III_treatments/cancer_treatments
         cancer_stage_IV_pct = cancer_stage_IV_treatments/cancer_treatments
         years_gained = table['YearsGained'].sum()
+        healthy_years_gained = table['HYearsGained'].sum()
+        disability_free_years_gained = table['DFYearsGained'].sum()
+        daly_gained = table['DALYGained'].sum()
         asymptomatic_treatments = table['AsymtomaticCCRDiscovered'].sum()
         symptomatic_treatments = cancer_treatments - asymptomatic_treatments
         print(f[1],'Total Cost in M CLP:', total_cost, 'Total Cancer Treatments', cancer_treatments, 'Cancer Stage I Treatments', cancer_stage_I_treatments, 'Cancer Stage II Treatments', cancer_stage_II_treatments, 'Cancer Stage III Treatments', cancer_stage_III_treatments, 'Cancer Stage IV Treatments', cancer_stage_IV_treatments, sep='\n')
@@ -64,7 +68,8 @@ def costs_analysis():
         'Treatments': cancer_treatments, 
         'StageI': cancer_stage_I_treatments, 'StageII': cancer_stage_II_treatments, 'StageIII': cancer_stage_III_treatments, 'StageIV': cancer_stage_IV_treatments,
         'StageI%': cancer_stage_I_pct, 'StageII%': cancer_stage_II_pct, 'StageIII%': cancer_stage_III_pct, 'StageIV%': cancer_stage_IV_pct, 
-        'YearsGained': years_gained, 'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
+        'YearsGained': years_gained, 'HYearsGained': healthy_years_gained, 'DFYearsGained': disability_free_years_gained, 'DALYGained': daly_gained,
+        'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
 
     print(costs.head)
     base_cost = costs.loc['ADH 20%']['Total Cost M CLP']
@@ -183,8 +188,9 @@ def costs_analysis():
         if costs.loc[adherence, 'YearsGained'] != 0:
             total_cost_of_one_year = costs.loc[adherence, 'Total Cost M CLP']/costs.loc[adherence, 'YearsGained']
         ax.text(-0.6, -1.35, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP']))
-        + ' M CLP\nYears Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
-        ), fontsize=18)
+        + ' M CLP\n'
+        + 'DALYs gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'DALYGained'])))
+        , fontsize=18)
 
     # Make it horizontal
     fig.legend(loc=(0.15,0.877), labels=[ 

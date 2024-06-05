@@ -66,6 +66,7 @@ class Person():
         self.treated_cancer = False
         self.screenable = False
         self.prueba = False
+        self.counter = counter
         if uniform(0,1) < 0.5:
             self.male = True
 
@@ -78,10 +79,12 @@ class Person():
         self.screenable = False
         if uniform(0,1) < adherence_percentage:
             self.screenable = True
-
+        
         # Se genera la probabilidad de tener cancer
         if uniform(0,1) < prevalence:
             self.simulate_cancer_history()
+        #if self.will_develop_cancer:
+        #    print('Person: ', self.counter, '\nScreenable', self.screenable, '\nAge of Death', self.age_of_death, '\nAge of Screnable Cancer', self.age_of_screenable_cancer, '\nAge of Symptomatic Cancer', self.age_of_symptomatic_cancer, '\nAge', self.age, '\n*******************')
 
     def die(self):
         self.alive = False
@@ -131,9 +134,9 @@ class Person():
 
         # Define age of death
         if self.male:
-            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
         else:
-            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
 
         # This person can already be screened
         if self.age >= self.age_of_screenable_cancer:
@@ -154,17 +157,52 @@ class Person():
 
     
     def asymptomatic_screening(self):
+        year_of_birth = self.year_of_birth
+        if year_of_birth > 2095:
+            year_of_birth = 2095
         
         old_age = self.age_of_death
         if self.male:
-            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            years_gained = round(cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            healthy_years_gained = round(cancer_life_expectancy_by_stage_and_age['HLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['HLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            disability_free_years_gained = round(cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            disability_years_difference = round(
+                cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] 
+                - (cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            )
+            #Asymptomatic DALY
+            asymptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            asymptomatic_years_lost = male_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            asymptomatic_daly = (asymptomatic_disability_years_lost * 0.288) + asymptomatic_years_lost
+
+            #Symptomatic DALY
+            symptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            symptomatic_years_lost = male_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            symptomatic_daly = (symptomatic_disability_years_lost * 0.288) + symptomatic_years_lost
         else:
-            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            years_gained = round(cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            healthy_years_gained = round(cancer_life_expectancy_by_stage_and_age['HLE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['HLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            disability_free_years_gained = round(cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            disability_years_difference = round(
+                cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] 
+                - (cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
+            , 3)
+
+            #Asymptomatic DALY
+            asymptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            asymptomatic_years_lost = female_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            asymptomatic_daly = (asymptomatic_disability_years_lost * 0.288) + asymptomatic_years_lost
+
+            #Symptomatic DALY
+            symptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            symptomatic_years_lost = female_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
+            symptomatic_daly = (symptomatic_disability_years_lost * 0.288) + symptomatic_years_lost
         
-        #if self.age_of_death > 120:
-        #    self.age_of_death = 120
-        years_gained = self.age_of_death - old_age
-        return years_gained
+        daly = round(symptomatic_daly - asymptomatic_daly)
+        #print('male', str(self.male), '\nyears gained', str(years_gained), '\ndisability years difference', str(disability_years_difference), '\nsymptomatic daly', str(symptomatic_daly), '\nasymptomatic daly', str(asymptomatic_daly), '\ndaly', str(daly) + '\n*******************')
+        return years_gained, healthy_years_gained, disability_free_years_gained, daly
     def treat_cancer(self):
         self.treated_cancer = True
         self.will_develop_cancer = False

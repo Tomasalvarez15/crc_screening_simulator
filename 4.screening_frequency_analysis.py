@@ -21,7 +21,8 @@ def costs_analysis():
     'Stage I Costs','Stage II Costs','Stage III Costs','Stage IV Costs',
     'Treatments', 'StageI', 'StageII', 'StageIII', 'StageIV',
     'StageI%', 'StageII%', 'StageIII%', 'StageIV%', 
-    'YearsGained', 'AsymptomaticTreatments', 'SymptomaticTreatments'])
+    'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained',
+    'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
     file_path = 'simulations/1year/parameters/simulation_parameters.json'
@@ -65,6 +66,9 @@ def costs_analysis():
         cancer_stage_III_pct = cancer_stage_III_treatments/cancer_treatments
         cancer_stage_IV_pct = cancer_stage_IV_treatments/cancer_treatments
         years_gained = table['YearsGained'].sum()
+        healthy_years_gained = table['HYearsGained'].sum()
+        disability_free_years_gained = table['DFYearsGained'].sum()
+        daly_gained = table['DALYGained'].sum()
         asymptomatic_treatments = table['AsymtomaticCCRDiscovered'].sum()
         symptomatic_treatments = cancer_treatments - asymptomatic_treatments
         costs.loc[f[1]] = {'Total Cost M CLP': total_cost, 
@@ -75,7 +79,8 @@ def costs_analysis():
         'Treatments': cancer_treatments, 
         'StageI': cancer_stage_I_treatments, 'StageII': cancer_stage_II_treatments, 'StageIII': cancer_stage_III_treatments, 'StageIV': cancer_stage_IV_treatments,
         'StageI%': cancer_stage_I_pct, 'StageII%': cancer_stage_II_pct, 'StageIII%': cancer_stage_III_pct, 'StageIV%': cancer_stage_IV_pct, 
-        'YearsGained': years_gained, 'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
+        'YearsGained': years_gained, 'HYearsGained': healthy_years_gained, 'DFYearsGained': disability_free_years_gained, 'DALYGained': daly_gained,
+        'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
 
     print(costs.head)
     
@@ -186,14 +191,16 @@ def costs_analysis():
         ax[i].set_title(adherence)
         ax[i].set_ylabel('')
         if costs.loc[adherence, 'DifferenceCosts'] != 0:
-            costsDifferenceText = 'Cost Difference: ' + str(format_with_spaces(round(costs.loc[adherence, 'Percentage Cost']*100,2))) + '%\n'
+            costsDifferenceText = 'Cost Difference: ' + str(round(costs.loc[adherence, 'Percentage Cost']*100,2)) + '%\n'
         else:
             costsDifferenceText = ''
         if costs.loc[adherence, 'YearsGained'] != 0:
             total_cost_of_one_year = costs.loc[adherence, 'Total Cost M CLP']/costs.loc[adherence, 'YearsGained']
         ax[i].text(-1, -2, 'Total Cost: ' + str(format_with_spaces(costs.loc[adherence, 'Total Cost M CLP']))
-        + ' M CLP\n' + costsDifferenceText + 'Years Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
-        ))
+        + ' M CLP\n' + costsDifferenceText
+        + 'DALYs gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'DALYGained'])))
+        #+ 'Years Gained: ' + str(format_with_spaces(int(costs.loc[adherence, 'YearsGained']))
+        )
 
     # Make it horizontal
     fig.legend(loc=(0.15,0.837), labels=costs.columns[3:9], title='Costs', ncols=2 )
@@ -202,9 +209,9 @@ def costs_analysis():
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     fig.text(0.7, 0.91, 'FIT Sensitivity: ' + str(FIT_SENSITIVITY) + ' FIT Specificity: ' + str(FIT_SPECIFICITY) 
     + ' \nPeriod: ' + str(STARTING_YEAR) + '-' + str(STARTING_YEAR+YEARS_TO_SIMULATE) + ' Prevalence: ' + str(CRC_PREVALENCE)
-    + ' \n Adherence: 80' + str('%') + ' FIT Cost: '  + str(format_with_spaces(FIT_COST)) + ' CLP'
-    + ' \n Colonoscopy Cost: ' + str(format_with_spaces(COLONOSCOPY_COST)) + ' CLP'
-    + ' \n Avg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
+    + ' \nAdherence: 80' + str('%') + ' FIT Cost: '  + str(format_with_spaces(FIT_COST)) + ' CLP'
+    + ' \nColonoscopy Cost: ' + str(format_with_spaces(COLONOSCOPY_COST)) + ' CLP'
+    + ' \nAvg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
     ha='center', va='center', fontsize=10, bbox=props)
 
     plt.savefig('plots/costs_frequency.png', dpi=600)

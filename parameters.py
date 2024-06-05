@@ -26,15 +26,8 @@ CANCER_TREATMENT_COSTS = {
 print('Cancer Treatment Costs', CANCER_TREATMENT_COSTS)
 
 # 3. Define the screening frequency
-SCREENING_FREQUENCY = [
-    ['Annual', 50, 75, 1, 0],
-    ['Biennial', 60, 75, 2, 0],
-    ['Biennial', 50, 75, 2, 0],
-    ['Triennial', 50, 75, 3, 1],
-    ['Biennial', 50, 75, 2, 0],
-    ['Biennial', 45, 80, 2, 0],
-    ['Biennial', 40, 85, 2, 0],
-][1]
+SCREENING_FREQUENCY = ['Biennial', 50, 75, 2, 0]
+
 
 
 # 4. Define the cost of colonoscopy

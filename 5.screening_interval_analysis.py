@@ -27,8 +27,9 @@ def costs_analysis():
     'FIT Costs', 'Colonoscopy Costs', 
     'Stage I Costs','Stage II Costs','Stage III Costs','Stage IV Costs',
     'Treatments', 'StageI', 'StageII', 'StageIII', 'StageIV',
-    'StageI%', 'StageII%', 'StageIII%', 'StageIV%', 
-    'YearsGained', 'AsymptomaticTreatments', 'SymptomaticTreatments'])
+    'StageI%', 'StageII%', 'StageIII%', 'StageIV%',
+    'YearsGained', 'HYearsGained', 'DFYearsGained', 'DALYGained',
+    'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
     file_path = 'simulations/interval50_75/parameters/simulation_parameters.json'
@@ -72,6 +73,9 @@ def costs_analysis():
         cancer_stage_III_pct = cancer_stage_III_treatments/cancer_treatments
         cancer_stage_IV_pct = cancer_stage_IV_treatments/cancer_treatments
         years_gained = table['YearsGained'].sum()
+        healthy_years_gained = table['HYearsGained'].sum()
+        disability_free_years_gained = table['DFYearsGained'].sum()
+        daly_gained = table['DALYGained'].sum()
         asymptomatic_treatments = table['AsymtomaticCCRDiscovered'].sum()
         symptomatic_treatments = cancer_treatments - asymptomatic_treatments
         costs.loc[f[1]] = {'Total Cost M CLP': total_cost, 
@@ -82,12 +86,14 @@ def costs_analysis():
         'Treatments': cancer_treatments, 
         'StageI': cancer_stage_I_treatments, 'StageII': cancer_stage_II_treatments, 'StageIII': cancer_stage_III_treatments, 'StageIV': cancer_stage_IV_treatments,
         'StageI%': cancer_stage_I_pct, 'StageII%': cancer_stage_II_pct, 'StageIII%': cancer_stage_III_pct, 'StageIV%': cancer_stage_IV_pct, 
-        'YearsGained': years_gained, 'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
+        'YearsGained': years_gained, 'HYearsGained': healthy_years_gained, 'DFYearsGained': disability_free_years_gained, 'DALYGained': daly_gained,
+        'AsymptomaticTreatments': asymptomatic_treatments, 'SymptomaticTreatments': symptomatic_treatments}
 
     print(costs.head)
     
     base_cost = costs.loc['50-75\n(25)']['Total Cost M CLP']
     base_years = costs.loc['50-75\n(25)']['YearsGained']
+    base_daly = costs.loc['50-75\n(25)']['DALYGained']
     for f in file_names:
         costs.loc[f[1],'Percentage Cost'] = costs.loc[f[1]]['Total Cost M CLP']/base_cost
         costs.loc[f[1], 'Inverted Percentage Cost'] = 1-costs.loc[f[1],'Percentage Cost']
@@ -95,16 +101,19 @@ def costs_analysis():
 
 
         costs.loc[f[1], 'Percentage Years'] = costs.loc[f[1]]['YearsGained']/base_years
-        costs.loc[f[1], 'Inverted Percentage Years'] = 1-costs.loc[f[1], 'Percentage Years']
+        costs.loc[f[1], 'Percentage DALY'] = costs.loc[f[1]]['DALYGained']/base_daly
 
-        if costs.loc[f[1], 'Inverted Percentage Years'] == 0:
+        costs.loc[f[1], 'Inverted Percentage Years'] = 1-costs.loc[f[1], 'Percentage Years']
+        costs.loc[f[1], 'Inverted Percentage DALY'] = 1-costs.loc[f[1], 'Percentage DALY']
+
+        if costs.loc[f[1], 'Inverted Percentage DALY'] == 0:
             pass
-        elif costs.loc[f[1], 'Percentage Years'] > 1:
-            costs.loc[f[1], 'Efficacy Ratio'] = (1 - costs.loc[f[1], 'Percentage Years'])/(1 - costs.loc[f[1],'Percentage Cost'])
+        elif costs.loc[f[1], 'Percentage DALY'] > 1:
+            costs.loc[f[1], 'Efficacy Ratio'] = (1 - costs.loc[f[1], 'Percentage DALY'])/(1 - costs.loc[f[1],'Percentage Cost'])
         else:
-            print(costs.loc[f[1], 'Inverted Percentage Years'])
+            print(costs.loc[f[1], 'Inverted Percentage DALY'])
             print(costs.loc[f[1], 'Inverted Percentage Cost'])
-            costs.loc[f[1], 'Efficacy Ratio'] = costs.loc[f[1], 'Inverted Percentage Years']/costs.loc[f[1], 'Inverted Percentage Cost']
+            costs.loc[f[1], 'Efficacy Ratio'] = costs.loc[f[1], 'Inverted Percentage DALY']/costs.loc[f[1], 'Inverted Percentage Cost']
 
     # Treaments as ints
     costs['Cancer Treatments'] = costs['Treatments'].apply(lambda x: int(x))
@@ -118,6 +127,25 @@ def costs_analysis():
     costs['StageII%'] = costs['StageII%'].apply(lambda x: '{:.2%}'.format(x))
     costs['StageIII%'] = costs['StageIII%'].apply(lambda x: '{:.2%}'.format(x))
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
+
+    # Reorder columns in this order
+    # Interval, Total Cost M CLP, Percentage Cost, Inverted Percentage Cost, DALY Gained, Percentage DALY, Inverted Percentage DALY, Efficacy Ratio
+    costs = costs[['Total Cost M CLP', 'Percentage Cost', 'Inverted Percentage Cost', 'DifferenceCosts', 'DALYGained', 'Percentage DALY', 'Inverted Percentage DALY', 'Efficacy Ratio', 'YearsGained', 'Percentage Years', 'Inverted Percentage Years', 'AsymptomaticTreatments', 'SymptomaticTreatments', 'Cancer Treatments', 'StageI', 'StageII', 'StageIII', 'StageIV', 'StageI%', 'StageII%', 'StageIII%', 'StageIV%', 'HYearsGained', 'DFYearsGained']]
+
+    # Round percentages to 3 decimals
+    costs['Percentage Cost'] = costs['Percentage Cost'].apply(lambda x: '{:.2%}'.format(x))
+    costs['Inverted Percentage Cost'] = costs['Inverted Percentage Cost'].apply(lambda x: '{:.2%}'.format(x))
+    costs['Percentage DALY'] = costs['Percentage DALY'].apply(lambda x: '{:.2%}'.format(x))
+    costs['Inverted Percentage DALY'] = costs['Inverted Percentage DALY'].apply(lambda x: '{:.2%}'.format(x))
+    
+    # Round Efficacy Ratio but no percentage
+    costs['Efficacy Ratio'] = costs['Efficacy Ratio'].apply(lambda x: '{:.2f}'.format(x))
+
+    # Format Total Cost M CLP with format_with_spaces
+    costs['Total Cost M CLP'] = costs['Total Cost M CLP'].apply(lambda x: format_with_spaces(x))
+
+    # Format DALY Gained into int and with format_with_spaces
+    costs['DALYGained'] = costs['DALYGained'].apply(lambda x: format_with_spaces(str(int(x))))
 
 
     costs.to_csv('simulations/interval50_75/costs_summary.csv', sep=';', encoding='utf-8', index=True)
