@@ -1,9 +1,5 @@
 from population import Population
 import os
-import sys
-
-# setting path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 # Start counting the time
 import time

@@ -4,11 +4,6 @@ import numpy as np
 import seaborn as sns
 from random import randint
 from random import choices
-import sys
-import os
-
-# setting path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 def get_male_life_expectancy_dictionary():
     male_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)

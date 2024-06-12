@@ -1,10 +1,3 @@
-
-import sys
-import os
- 
-# setting path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../2.simulation_auxiliary_functions/')))
-
 from random import uniform, randint, choices, seed
 import numpy as np
 import pandas as pd

@@ -1,9 +1,4 @@
 import json
-import os
-import sys
-
-# setting path
-#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 def format_with_spaces(n):
     n_str = str(n)[::-1]
