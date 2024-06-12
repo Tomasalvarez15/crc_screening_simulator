@@ -4,11 +4,14 @@ import numpy as np
 import seaborn as sns
 from random import randint
 from random import choices
+import sys
+import os
 
-
+# setting path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 
 def get_male_life_expectancy_dictionary():
-    male_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
+    male_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
     print(male_life_expectancy.shape)
     male_life_expectancy_dict = {}
     print(male_life_expectancy.columns)
@@ -23,7 +26,7 @@ def get_male_life_expectancy_dictionary():
     return male_life_expectancy_dict
 
 def get_female_life_expectancy_dictionary():
-    female_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
+    female_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
     print(female_life_expectancy.shape)
     female_life_expectancy_dict = {}
 
@@ -38,7 +41,7 @@ def get_female_life_expectancy_dictionary():
 
 
 def get_male_life_expectancy_dictionary2():
-    male_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
+    male_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
 
     male_life_expectancy_dict = {}
     print(male_life_expectancy.columns)
@@ -48,7 +51,7 @@ def get_male_life_expectancy_dictionary2():
     return male_life_expectancy_dict
 
 def get_female_life_expectancy_dictionary2():
-    female_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
+    female_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
 
     female_life_expectancy_dict = {}
 
@@ -59,9 +62,9 @@ def get_female_life_expectancy_dictionary2():
 
 
 def get_male_life_expectancy_plot():
-    male_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
-    female_life_expectancy = pd.read_csv('initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
-    chilean_life_expectancy = pd.read_excel('initial_data/tablas-de-mortalidad-de-chile-1992-2050.xlsx', sheet_name='BD Tablas de Mortalidad', skiprows=1)
+    male_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_male.csv', sep=';', encoding='utf-8', low_memory=False)
+    female_life_expectancy = pd.read_csv('1.initial_data/cohort_life_expectancy_female.csv', sep=';', encoding='utf-8', low_memory=False)
+    chilean_life_expectancy = pd.read_excel('1.initial_data/tablas-de-mortalidad-de-chile-1992-2050.xlsx', sheet_name='BD Tablas de Mortalidad', skiprows=1)
     
     chilean_male_life_expectancy = chilean_life_expectancy[(chilean_life_expectancy['Cod_region'] == 0) & (chilean_life_expectancy['Sexo'] == 'Hombre')]
     chilean_female_life_expectancy = chilean_life_expectancy[(chilean_life_expectancy['Cod_region'] == 0) & (chilean_life_expectancy['Sexo'] == 'Mujer')]
@@ -102,9 +105,9 @@ def get_male_life_expectancy_plot():
     plt.plot(years, chilean_male_life_expectancy_list, label='Chilean Male Cohort Life Expectancy')
     plt.plot(years, chilean_female_life_expectancy_list, label='Chilean Female Cohort Life Expectancy')
     plt.legend()
-    plt.savefig('plots/life_expectancy.png')
+    plt.savefig('4.data_plots/life_expectancy.png')
 
-get_male_life_expectancy_plot()
+#get_male_life_expectancy_plot()
 
-print(get_female_life_expectancy_dictionary())
+#print(get_female_life_expectancy_dictionary())
     

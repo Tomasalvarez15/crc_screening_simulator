@@ -1,8 +1,9 @@
 
 import sys
+import os
  
 # setting path
-sys.path.append('../DB Simulacion')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../2.simulation_auxiliary_functions/')))
 
 from random import uniform, randint, choices, seed
 import numpy as np
@@ -15,7 +16,7 @@ female_life_expectancy_dict = get_female_life_expectancy_dictionary()
 
 
 # Obtained from https://gis.cdc.gov/Cancer/USCS/#/Demographics/  
-ccr_age_risk = pd.read_csv('processed_data/ccr_risk.csv', sep=';', encoding='utf-8', low_memory=False)
+ccr_age_risk = pd.read_csv('1.processed_data/ccr_risk.csv', sep=';', encoding='utf-8', low_memory=False)
 
 ccr_age_risk_list = []
 

@@ -154,7 +154,7 @@ def test_life_expectancy():
 
     plt.legend()
 
-    plt.savefig('crc_male_life_expectancies.png')
+    plt.savefig('4.data_plots/crc_male_life_expectancies.png')
 
     # Make the same plot but for female life expectancies
 
@@ -180,7 +180,7 @@ def test_life_expectancy():
 
     plt.legend()
 
-    plt.savefig('crc_female_life_expectancies.png')
+    plt.savefig('4.data_plots/crc_female_life_expectancies.png')
 
     # Plot the three types of life expectancies for males in three subplots
 
@@ -211,7 +211,7 @@ def test_life_expectancy():
 
         axs[i].legend()
 
-    plt.savefig('crc_male_life_expectancies_all.png')
+    plt.savefig('4.data_plots/crc_male_life_expectancies_all.png')
 
     # Plot the three types of life expectancies for females in three subplots
 
@@ -244,6 +244,6 @@ def test_life_expectancy():
 
         axs[i].legend()
 
-    plt.savefig('crc_female_life_expectancies_all.png')
+    plt.savefig('4.data_plots/crc_female_life_expectancies_all.png')
 
 test_life_expectancy()
