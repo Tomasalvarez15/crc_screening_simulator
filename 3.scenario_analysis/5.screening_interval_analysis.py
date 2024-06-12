@@ -9,16 +9,16 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/interval60_75/costs/costs_0_8.csv', '60-75\n(15)'],
-        ['simulations/interval50_70/costs/costs_0_8.csv', '50-70\n(20)'],
-        ['simulations/interval55_75/costs/costs_0_8.csv', '55-75\n(20)'],
-        ['simulations/interval50_75/costs/costs_0_8.csv', '50-75\n(25)'],
-        ['simulations/interval55_80/costs/costs_0_8.csv', '55-80\n(25)'],
-        ['simulations/interval50_80/costs/costs_0_8.csv', '50-80\n(30)'], 
-        ['simulations/interval45_75/costs/costs_0_8.csv', '45-75\n(30)'],
-        ['simulations/interval45_80/costs/costs_0_8.csv', '45-80\n(35)'], 
-        ['simulations/interval40_85/costs/costs_0_8.csv', '40-85\n(45)'],
-        ['simulations/interval35_90/costs/costs_0_8.csv', '35-90\n(55)']
+        ['4.simulation_outputs/interval60_75/costs/costs_0_8.csv', '60-75\n(15)'],
+        ['4.simulation_outputs/interval50_70/costs/costs_0_8.csv', '50-70\n(20)'],
+        ['4.simulation_outputs/interval55_75/costs/costs_0_8.csv', '55-75\n(20)'],
+        ['4.simulation_outputs/interval50_75/costs/costs_0_8.csv', '50-75\n(25)'],
+        ['4.simulation_outputs/interval55_80/costs/costs_0_8.csv', '55-80\n(25)'],
+        ['4.simulation_outputs/interval50_80/costs/costs_0_8.csv', '50-80\n(30)'], 
+        ['4.simulation_outputs/interval45_75/costs/costs_0_8.csv', '45-75\n(30)'],
+        ['4.simulation_outputs/interval45_80/costs/costs_0_8.csv', '45-80\n(35)'], 
+        ['4.simulation_outputs/interval40_85/costs/costs_0_8.csv', '40-85\n(45)'],
+        ['4.simulation_outputs/interval35_90/costs/costs_0_8.csv', '35-90\n(55)']
         ]
 
     costs = pd.DataFrame(columns=['Total Cost M CLP',
@@ -32,7 +32,7 @@ def costs_analysis():
     'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
-    file_path = 'simulations/interval50_75/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/interval50_75/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -148,7 +148,7 @@ def costs_analysis():
     costs['DALYGained'] = costs['DALYGained'].apply(lambda x: format_with_spaces(str(int(x))))
 
 
-    costs.to_csv('simulations/interval50_75/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/interval50_75/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     
     

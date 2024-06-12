@@ -22,7 +22,7 @@ def costs_analysis():
     import json
 
     # Path to your JSON file
-    file_path = 'simulations/default/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/default/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -32,7 +32,7 @@ def costs_analysis():
     for f in file_names:
         file_name = f[0]
 
-        table = pd.read_csv('simulations/default/costs/' + file_name, sep=';', encoding='utf-8', low_memory=False)
+        table = pd.read_csv('4.simulation_outputs/default/costs/' + file_name, sep=';', encoding='utf-8', low_memory=False)
         print(table.columns)
         total_cost = table['Total'].sum()
         fit = table['Fit'].sum()
@@ -94,7 +94,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/default/costs_example.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/default/costs_example.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -122,7 +122,7 @@ def costs_analysis():
         ax.text(v, i, '{:.2%}'.format(v), ha='left', va='center', fontsize=12)
     
 
-    plt.savefig('plots/screening_efficacy_for_example.png')
+    plt.savefig('4.analysis_plots/screening_efficacy_for_example.png')
 
     # Print all the asymptomatic treatments percentages divided by the adherence percentage
     adherences_percentages = [0.2]
@@ -161,7 +161,7 @@ def costs_analysis():
 
     #plt.subplots_adjust(hspace=0.5, wspace=0.5, top=0.8)
     plt.subplots_adjust(hspace=0.4, wspace=0.5)
-    plt.savefig('plots/treatments_for_example.png')
+    plt.savefig('4.analysis_plots/treatments_for_example.png')
 
     # Make multiple pie graphs with all the costs: FIT, Colonoscopy, Stage I, Stage II, Stage III, Stage IV
     # Add the total cost at the bottom of each pie graph
@@ -205,6 +205,6 @@ def costs_analysis():
     ha='center', va='center', fontsize=10, bbox=props, linespacing = 1.5 )
 
 
-    plt.savefig('plots/costs_for_example.png', dpi=600)
+    plt.savefig('4.analysis_plots/costs_for_example.png', dpi=600)
 
 costs_analysis()

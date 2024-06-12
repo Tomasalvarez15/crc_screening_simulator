@@ -9,16 +9,16 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/default_1/costs/costs_0_2.csv', 'Default 1'], 
-        ['simulations/default_2/costs/costs_0_2.csv', 'Default 2'], 
-        ['simulations/default_3/costs/costs_0_2.csv', 'Default 3'],
-        ['simulations/default_4/costs/costs_0_2.csv', 'Default 4'],
-        ['simulations/default_5/costs/costs_0_2.csv', 'Default 5'],
-        ['simulations/default_6/costs/costs_0_2.csv', 'Default 6'],
-        ['simulations/default_7/costs/costs_0_2.csv', 'Default 7'], 
-        ['simulations/default_8/costs/costs_0_2.csv', 'Default 8'],
-        ['simulations/default_9/costs/costs_0_2.csv', 'Default 9'],
-        ['simulations/default_10/costs/costs_0_2.csv', 'Default 10']]
+        ['4.simulation_outputs/default_1/costs/costs_0_2.csv', 'Default 1'], 
+        ['4.simulation_outputs/default_2/costs/costs_0_2.csv', 'Default 2'], 
+        ['4.simulation_outputs/default_3/costs/costs_0_2.csv', 'Default 3'],
+        ['4.simulation_outputs/default_4/costs/costs_0_2.csv', 'Default 4'],
+        ['4.simulation_outputs/default_5/costs/costs_0_2.csv', 'Default 5'],
+        ['4.simulation_outputs/default_6/costs/costs_0_2.csv', 'Default 6'],
+        ['4.simulation_outputs/default_7/costs/costs_0_2.csv', 'Default 7'], 
+        ['4.simulation_outputs/default_8/costs/costs_0_2.csv', 'Default 8'],
+        ['4.simulation_outputs/default_9/costs/costs_0_2.csv', 'Default 9'],
+        ['4.simulation_outputs/default_10/costs/costs_0_2.csv', 'Default 10']]
 
     costs = pd.DataFrame(columns=['Total Cost M CLP',
     'Percentage Cost', 'DifferenceCosts',
@@ -31,7 +31,7 @@ def costs_analysis():
     'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
-    file_path = 'simulations/1year/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/1year/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -117,7 +117,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/default_1/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/default_1/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -145,7 +145,7 @@ def costs_analysis():
         ax.text(v, i, '{:.2%}'.format(v), ha='left', va='center', fontsize=8)
     
 
-    plt.savefig('plots/screening_efficacy_for_defaults.png')
+    plt.savefig('4.analysis_plots/screening_efficacy_for_defaults.png')
 
     # Print all the asymptomatic treatments percentages divided by the adherence percentage
     adherences_percentages = [0, 0.05, 0.1, 0.15, 0.2, 0.4, 0.6, 0.8]
@@ -189,7 +189,7 @@ def costs_analysis():
 
     #plt.subplots_adjust(hspace=0.5, wspace=0.5, top=0.8)
     plt.subplots_adjust(hspace=0.4, wspace=0.5)
-    plt.savefig('plots/treatments_for_defaults.png')
+    plt.savefig('4.analysis_plots/treatments_for_defaults.png')
 
     # Make multiple pie graphs with all the costs: FIT, Colonoscopy, Stage I, Stage II, Stage III, Stage IV
     # Add the total cost at the bottom of each pie graph
@@ -244,7 +244,7 @@ def costs_analysis():
     ha='center', va='center', fontsize=10, bbox=props, linespacing = 1.5 )
 
 
-    plt.savefig('plots/costs_for_defaults.png', dpi=600)
+    plt.savefig('4.analysis_plots/costs_for_defaults.png', dpi=600)
 
     
 

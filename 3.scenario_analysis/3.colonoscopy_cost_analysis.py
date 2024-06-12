@@ -9,14 +9,14 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/colonoscopy_421005/costs/costs_0_8.csv', 'Average\nColonoscopy Cost\n'+ str(format_with_spaces(421005)) + ' CLP'], 
-        ['simulations/colonoscopy_333190/costs/costs_0_8.csv', 'Clínica Bupa\nColonoscopy Cost\n'+ str(format_with_spaces(333190)) + ' CLP'], 
-        ['simulations/colonoscopy_425621/costs/costs_0_8.csv', 'UC Christus\nColonoscopy Cost\n'+ str(format_with_spaces(425621)) + ' CLP'], 
-        ['simulations/colonoscopy_504205/costs/costs_0_8.csv', 'Clínica Alemana\nColonoscopy Cost\n'+ str(format_with_spaces(504205)) + ' CLP']
+        ['4.simulation_outputs/colonoscopy_421005/costs/costs_0_8.csv', 'Average\nColonoscopy Cost\n'+ str(format_with_spaces(421005)) + ' CLP'], 
+        ['4.simulation_outputs/colonoscopy_333190/costs/costs_0_8.csv', 'Clínica Bupa\nColonoscopy Cost\n'+ str(format_with_spaces(333190)) + ' CLP'], 
+        ['4.simulation_outputs/colonoscopy_425621/costs/costs_0_8.csv', 'UC Christus\nColonoscopy Cost\n'+ str(format_with_spaces(425621)) + ' CLP'], 
+        ['4.simulation_outputs/colonoscopy_504205/costs/costs_0_8.csv', 'Clínica Alemana\nColonoscopy Cost\n'+ str(format_with_spaces(504205)) + ' CLP']
         ]
 
     # Path to your JSON file
-    file_path = 'simulations/colonoscopy_421005/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/colonoscopy_421005/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -99,7 +99,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/colonoscopy_421005/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/colonoscopy_421005/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -150,7 +150,7 @@ def costs_analysis():
     + ' \n Avg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
     ha='center', va='center', fontsize=10, bbox=props)
 
-    plt.savefig('plots/costs_colonoscopies', dpi=600)
+    plt.savefig('4.analysis_plots/costs_colonoscopies', dpi=600)
     #plt.show()
     
 

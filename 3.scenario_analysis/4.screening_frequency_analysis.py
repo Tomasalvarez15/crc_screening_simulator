@@ -9,10 +9,10 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/1year/costs/costs_0_8.csv', 'Annual'], 
-        ['simulations/2year/costs/costs_0_8.csv', 'Biennial'], 
-        ['simulations/3year/costs/costs_0_8.csv', 'Triennial'],
-        ['simulations/4year/costs/costs_0_8.csv', 'Quadrennial']]
+        ['4.simulation_outputs/1year/costs/costs_0_8.csv', 'Annual'], 
+        ['4.simulation_outputs/2year/costs/costs_0_8.csv', 'Biennial'], 
+        ['4.simulation_outputs/3year/costs/costs_0_8.csv', 'Triennial'],
+        ['4.simulation_outputs/4year/costs/costs_0_8.csv', 'Quadrennial']]
 
     costs = pd.DataFrame(columns=['Total Cost M CLP',
     'Percentage Cost', 'DifferenceCosts',
@@ -25,7 +25,7 @@ def costs_analysis():
     'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
-    file_path = 'simulations/1year/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/1year/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -104,7 +104,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/2year/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/2year/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -132,7 +132,7 @@ def costs_analysis():
         ax.text(v, i, '{:.2%}'.format(v), ha='left', va='center', fontsize=9)
     
 
-    plt.savefig('plots/screening_efficacy_by_frequency.png')
+    plt.savefig('4.analysis_plots/screening_efficacy_by_frequency.png')
 
 
     fig, ax = plt.subplots(1, 4, figsize=(12, 7))
@@ -164,7 +164,7 @@ def costs_analysis():
 
     #plt.subplots_adjust(hspace=0.5, wspace=0.5, top=0.8)
     plt.subplots_adjust(hspace=0.4, wspace=0.5)
-    plt.savefig('plots/treatments_by_frequency.png')
+    plt.savefig('4.analysis_plots/treatments_by_frequency.png')
 
 
     # Make multiple pie graphs with all the costs: FIT, Colonoscopy, Stage I, Stage II, Stage III, Stage IV
@@ -214,7 +214,7 @@ def costs_analysis():
     + ' \nAvg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
     ha='center', va='center', fontsize=10, bbox=props)
 
-    plt.savefig('plots/costs_frequency.png', dpi=600)
+    plt.savefig('4.analysis_plots/costs_frequency.png', dpi=600)
     #plt.show()
     
 

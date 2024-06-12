@@ -9,14 +9,14 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/fit_5865/costs/costs_0_8.csv', 'UC Christus\nFIT Cost\n'+ str(format_with_spaces(5865)) + ' CLP'], 
-        ['simulations/fit_4865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(4865)) + ' CLP'], 
-        ['simulations/fit_3865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(3865)) + ' CLP'], 
-        ['simulations/fit_2865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(2865)) + ' CLP']
+        ['4.simulation_outputs/fit_5865/costs/costs_0_8.csv', 'UC Christus\nFIT Cost\n'+ str(format_with_spaces(5865)) + ' CLP'], 
+        ['4.simulation_outputs/fit_4865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(4865)) + ' CLP'], 
+        ['4.simulation_outputs/fit_3865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(3865)) + ' CLP'], 
+        ['4.simulation_outputs/fit_2865/costs/costs_0_8.csv', 'FIT Cost\n'+ str(format_with_spaces(2865)) + ' CLP']
         ]
 
     # Path to your JSON file
-    file_path = 'simulations/colonoscopy_421005/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/colonoscopy_421005/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -97,7 +97,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/fit_5865/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/fit_5865/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -144,7 +144,7 @@ def costs_analysis():
     + ' \n Avg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
     ha='center', va='center', fontsize=10, bbox=props)
 
-    plt.savefig('plots/costs_fit', dpi=600)
+    plt.savefig('4.analysis_plots/costs_fit', dpi=600)
     #plt.show()
     
 

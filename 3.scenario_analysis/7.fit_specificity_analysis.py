@@ -9,10 +9,10 @@ def format_with_spaces(n):
 def costs_analysis():
     import pandas as pd
     file_names = [
-        ['simulations/worse_specificity/costs/costs_0_8.csv', 'Worse\nSpecificity\n(0.92)'],
-        ['simulations/default/costs/costs_0_8.csv', 'Normal\nSpecificity\n(0.94)'],
-        ['simulations/improved_specificity/costs/costs_0_8.csv', 'Improved\nSpecificity\n(0.96)'], 
-        ['simulations/super_improved_specificity/costs/costs_0_8.csv', 'Super\nImproved\nSpecificity\n(0.999)'], 
+        ['4.simulation_outputs/worse_specificity/costs/costs_0_8.csv', 'Worse\nSpecificity\n(0.92)'],
+        ['4.simulation_outputs/default/costs/costs_0_8.csv', 'Normal\nSpecificity\n(0.94)'],
+        ['4.simulation_outputs/improved_specificity/costs/costs_0_8.csv', 'Improved\nSpecificity\n(0.96)'], 
+        ['4.simulation_outputs/super_improved_specificity/costs/costs_0_8.csv', 'Super\nImproved\nSpecificity\n(0.999)'], 
         ]
 
     costs = pd.DataFrame(columns=['Total Cost M CLP',
@@ -26,7 +26,7 @@ def costs_analysis():
     'AsymptomaticTreatments', 'SymptomaticTreatments'])
 
     # Path to your JSON file
-    file_path = 'simulations/improved_specificity/parameters/simulation_parameters.json'
+    file_path = '4.simulation_outputs/improved_specificity/parameters/simulation_parameters.json'
 
     # Read from file
     with open(file_path, 'r') as file:
@@ -121,7 +121,7 @@ def costs_analysis():
     costs['StageIV%'] = costs['StageIV%'].apply(lambda x: '{:.2%}'.format(x))
 
 
-    costs.to_csv('simulations/improved_specificity/costs_summary.csv', sep=';', encoding='utf-8', index=True)
+    costs.to_csv('4.simulation_outputs/improved_specificity/costs_summary.csv', sep=';', encoding='utf-8', index=True)
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -148,7 +148,7 @@ def costs_analysis():
         ax.text(v, i, '{:.2%}'.format(v), ha='left', va='center', fontsize=8)
     
 
-    plt.savefig('plots/screening_efficacy_by_fit_specificity.png')
+    plt.savefig('4.analysis_plots/screening_efficacy_by_fit_specificity.png')
 
 
     fig, ax = plt.subplots(1, 4, figsize=(11, 7))
@@ -179,7 +179,7 @@ def costs_analysis():
 
     #plt.subplots_adjust(hspace=0.5, wspace=0.5, top=0.8)
     plt.subplots_adjust(hspace=0.4, wspace=0.5)
-    plt.savefig('plots/treatments_by_fit_specificity.png')
+    plt.savefig('4.analysis_plots/treatments_by_fit_specificity.png')
 
 
     # Make multiple pie graphs with all the costs: FIT, Colonoscopy, Stage I, Stage II, Stage III, Stage IV
@@ -228,7 +228,7 @@ def costs_analysis():
     + ' \n Avg. CRC Cost by Stage\n I:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['I'])) + ' CLP II:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['II'])) + ' CLP III:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['III'])) + ' CLP IV:' + str(format_with_spaces(CANCER_TREATMENT_COSTS['IV'])) + 'CLP', 
     ha='center', va='center', fontsize=10, bbox=props)
 
-    plt.savefig('plots/costs_fit_specificity.png', dpi=600)
+    plt.savefig('4.analysis_plots/costs_fit_specificity.png', dpi=600)
     #plt.show()
     
 

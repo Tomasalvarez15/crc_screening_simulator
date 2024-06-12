@@ -2,9 +2,9 @@ import pandas as pd
 import json
 from random import uniform, randint, choices, seed
 import numpy as np
-from clases.person import Person
+from person import Person
 from parameters import CANCER_TREATMENT_COSTS, FIT_SENSITIVITY, FIT_SPECIFICITY, SEED, FIT_COST, COLONOSCOPY_COST, YEARS_TO_SIMULATE, STARTING_YEAR, SCREENING_FREQUENCY, CRC_PREVALENCE
-initial_population = pd.read_csv('processed_data/initial_population.csv', sep=';', encoding='utf-8', low_memory=False)
+initial_population = pd.read_csv('1.processed_data/initial_population.csv', sep=';', encoding='utf-8', low_memory=False)
 # Convert initial_population into a dictionary
 initial_population_dict = {}
 for row in initial_population.iterrows():
@@ -271,18 +271,18 @@ class Population():
             'FIT_SPECIFICITY': self.fit_specificity
         }
 
-        if not os.path.exists('simulations/' + self.folder_name):
-            os.makedirs('simulations/' + self.folder_name)
-            os.makedirs('simulations/' + self.folder_name + '/censo')
-            os.makedirs('simulations/' + self.folder_name + '/population_stats')
-            os.makedirs('simulations/' + self.folder_name + '/costs')
-            os.makedirs('simulations/' + self.folder_name + '/parameters')
+        if not os.path.exists('4.simulation_outputs/' + self.folder_name):
+            os.makedirs('4.simulation_outputs/' + self.folder_name)
+            os.makedirs('4.simulation_outputs/' + self.folder_name + '/censo')
+            os.makedirs('4.simulation_outputs/' + self.folder_name + '/population_stats')
+            os.makedirs('4.simulation_outputs/' + self.folder_name + '/costs')
+            os.makedirs('4.simulation_outputs/' + self.folder_name + '/parameters')
         else:
             print('It already exists')
-        self.census.to_csv('simulations/' + self.folder_name + '/censo/censo' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
-        self.population_stats.to_csv('simulations/' + self.folder_name + '/population_stats/population_stats' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
-        self.costs.to_csv('simulations/' + self.folder_name + '/costs/costs_' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
-        with open('simulations/' + self.folder_name + '/parameters/simulation_parameters.json', 'w') as file:
+        self.census.to_csv('4.simulation_outputs/' + self.folder_name + '/censo/censo' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
+        self.population_stats.to_csv('4.simulation_outputs/' + self.folder_name + '/population_stats/population_stats' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
+        self.costs.to_csv('4.simulation_outputs/' + self.folder_name + '/costs/costs_' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
+        with open('4.simulation_outputs/' + self.folder_name + '/parameters/simulation_parameters.json', 'w') as file:
                 json.dump(parameters, file, indent=4)
 # Start counting the time
 import time
