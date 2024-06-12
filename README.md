@@ -9,8 +9,9 @@ MiCSS is a microsimulation model designed to evaluate the cost-effectiveness of 
 - Provides insights into the impact of screening on CRC prognosis and healthcare costs.
 
 ## Usage
-1. Run the 1.simulation.py file, it runs a number of scenarios and stores them in their own folder in the simulations folder
-2. Run the other numbered files to do an analysis on the outcomes of the scenarios and produce the plots in the plots folder
+0. Before running new simulations, delete all folders within the `simulations` folder. If these folders are not removed, the program will detect them as completed simulations and will not rerun them.
+1. Run the `1.simulation.py` file. This script executes multiple scenarios and saves each scenario's results in its own folder within the `simulations` directory.
+2. Run the remaining numbered scripts to analyze the outcomes of the scenarios. These scripts will generate plots and save them in the `plots` folder.
 
 ## Model Validation
 The model has undergone partial validation by the researcher. Further validation is recommended following the techniques described in the study by [Eddy et al. ,2012](https://www.valueinhealthjournal.com/article/S1098-3015(12)01656-7/fulltext?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1098301512016567%3Fshowall%3Dtrue)
