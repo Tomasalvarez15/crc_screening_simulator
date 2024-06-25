@@ -1,4 +1,5 @@
 # MiCSS (Micro Colorectal Cancer Screening Simulator)
+Copyright (C) 2024 Tomás Álvarezz
 
 MiCSS is a microsimulation model designed to evaluate the cost-effectiveness of colorectal cancer (CRC) screening strategies. The model simulates the natural history of CRC and the screening process for individuals in a defined population. MiCSS is intended to assist policymakers and healthcare professionals in making informed decisions regarding CRC screening programs.
 

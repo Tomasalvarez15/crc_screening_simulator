@@ -62,6 +62,7 @@ YEARS_TO_SIMULATE = 20
 # 8. Define the starting year
 STARTING_YEAR = 2023
 
+# From 
 # 9. Define FIT sensitivity
 FIT_SENSITIVITY = 0.79
 
