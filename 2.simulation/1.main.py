@@ -437,7 +437,7 @@ else:
 
 if not os.path.exists('4.simulation_outputs/fit_4865'):
     fit_4865 = Population(0.8, 'fit_4865')
-    fit_4865.fit_cost_cost = 4865
+    fit_4865.fit_cost = 4865
     fit_4865.simulate()
     print("--- %s minutes ---" % int((time.time() - start_time)/60))
 else:

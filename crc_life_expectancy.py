@@ -154,16 +154,14 @@ def test_life_expectancy():
 
     plt.legend()
 
-    plt.savefig('4.data_plots/crc_male_life_expectancies.png')
+    plt.savefig('crc_male_life_expectancies.png')
 
     # Make the same plot but for female life expectancies
 
     plt.clf()
 
-    for stage, ages in life_expectancies['LE']['female'].items():
+    for stage, ages in life_expectancies['female'].items():
         plt.plot(list(ages.keys()), list(ages.values()), label=stage)
-
-
     
     plt.xlabel('Age')
 
@@ -180,70 +178,6 @@ def test_life_expectancy():
 
     plt.legend()
 
-    plt.savefig('4.data_plots/crc_female_life_expectancies.png')
-
-    # Plot the three types of life expectancies for males in three subplots
-
-    plt.clf()
-
-    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
-
-    for i, le_type in enumerate(['LE', 'HLE', 'DFLE']):
-        for stage, ages in life_expectancies[le_type]['male'].items():
-            axs[i].plot(list(ages.keys()), list(ages.values()), label=stage)
-
-        axs[i].set_xlabel('Age')
-
-        axs[i].set_ylabel('Life expectancy')
-
-        axs[i].set_title(le_type)
-
-        # Set y limit to 0 - 25
-        axs[i].set_ylim(0, 25)
-
-        # Set x limit to 45 - 80
-        axs[i].set_xlim(45, 80)
-
-        # Put a line at 50 and 75
-        axs[i].axvline(x=50, color='k', linestyle='--')
-
-        axs[i].axvline(x=75, color='k', linestyle='--')
-
-        axs[i].legend()
-
-    plt.savefig('4.data_plots/crc_male_life_expectancies_all.png')
-
-    # Plot the three types of life expectancies for females in three subplots
-
-    plt.clf()
-
-    fig, axs = plt.subplots(3, 1, figsize=(10, 15))
-
-    for i, le_type in enumerate(['LE', 'HLE', 'DFLE']):
-        for stage, ages in life_expectancies[le_type]['female'].items():
-            axs[i].plot(list(ages.keys()), list(ages.values()), label=stage)
-
-        axs[i].set_xlabel('Age')
-
-        axs[i].set_ylabel('Life expectancy')
-
-        axs[i].set_title(le_type)
-
-        # Set y limit to 0 - 25
-        axs[i].set_ylim(0, 25)
-
-        # Set x limit to 45 - 80
-
-        axs[i].set_xlim(45, 80)
-
-        # Put a line at 50 and 75
-
-        axs[i].axvline(x=50, color='k', linestyle='--')
-
-        axs[i].axvline(x=75, color='k', linestyle='--')
-
-        axs[i].legend()
-
-    plt.savefig('4.data_plots/crc_female_life_expectancies_all.png')
+    plt.savefig('crc_female_life_expectancies.png')
 
 test_life_expectancy()
