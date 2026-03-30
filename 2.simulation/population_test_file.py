@@ -284,17 +284,17 @@ class Population():
         self.costs.to_csv('4.simulation_outputs/' + self.folder_name + '/costs/costs_' + '_'.join(str(self.adherence_percentage).split('.')) + '.csv', index=False, header=True, sep=';')
         with open('4.simulation_outputs/' + self.folder_name + '/parameters/simulation_parameters.json', 'w') as file:
                 json.dump(parameters, file, indent=4)
-# Start counting the time
-import time
-start_time = time.time()
-
-adherence_percentage_list = [0, 0.05, 0.1, 0.15, 0.2, 0.4, 0.6, 0.8]
 
 
-for adherence_percentage in adherence_percentage_list:
-    default = Population(adherence_percentage, 'pruebas/default200')
-    default.years_to_simulate = 200
-    default.simulate()
+if __name__ == '__main__':
+    import time
+    start_time = time.time()
 
+    adherence_percentage_list = [0, 0.05, 0.1, 0.15, 0.2, 0.4, 0.6, 0.8]
 
-    print("--- %s seconds ---" % int((time.time() - start_time)))
+    for adherence_percentage in adherence_percentage_list:
+        default = Population(adherence_percentage, 'pruebas/default200')
+        default.years_to_simulate = 200
+        default.simulate()
+
+        print("--- %s seconds ---" % int((time.time() - start_time)))

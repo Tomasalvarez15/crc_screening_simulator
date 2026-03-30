@@ -1,0 +1,84 @@
+Colorectal cancer (CRC) poses a significant challenge to global public health, demanding a nuanced investigation into the diagnostic and treatment processes within the public healthcare systems. This thesis seeks to illuminate the intricacies of managing CRC in the public healthcare system of the southern district of Santiago, employing the dynamic approach of Process Mining. Furthermore, to validate and refine proposed improvements, we will integrate simulation techniques, creating a comprehensive framework for enhancing patient outcomes, resource utilization, and overall healthcare efficiency.
+
+\section{Purpose of this study}
+\subsection*{Colorectal Cancer}
+CRC stands as one of the most prevalent forms of cancer globally, it ranks as the third most common malignant tumor in the world population, with a crude incidence rate of 24.2 per 100,000 inhabitants, and the second leading cause of death from neoplasms, with a crude mortality rate of 11.5 per 100,000 \cite{rios_situacion_2020}. The epidemiological evolution in recent years in Chile has a worrisome evolution and the treatment costs of advanced stages are a burden for the healthcare system.
+
+Recognizing the substantial morbidity and mortality associated with CRC, the 2018 Cancer Plan published by the Ministry of Health underscores the imperative need to analyze the care processes and treatment modalities for patients grappling with this condition \cite{villalobos_dintrans_nuevos_2020}.
+
+The complexity of patient care in the realm of cancer is undeniable, encompassing critical stages such as suspicion, diagnosis, and treatment. Each of these stages involves a multitude of processes, activities, and considerations, demanding careful navigation by healthcare providers. These intricacies, as highlighted by \citeA{lieberman_screening_2009}, \citeA{vega_colorectal_2015}, and \citeA{wolpin_systemic_2008}, necessitate a comprehensive approach to process analysis and improvement in the context of healthcare.
+
+Examining the challenges associated with CRC care processes through an operations research lens can be incredibly helpful for enhancing performance in healthcare delivery. This lens not only helps in understanding the nuanced relationships within the CRC care process but also provides a foundation for evidence-based decision-making and continuous improvement. Using the insights gained through operations research enables healthcare professionals to make informed changes to the existing processes, streamline workflows, and ultimately enhance the quality of care provided to CRC patients. Moreover, this approach aligns with the broader healthcare industry's commitment to embracing innovative strategies that prioritize efficiency, effectiveness, and patient-centered outcomes.
+
+\subsection*{Southern Metropolitan Public Healthcare Service}
+
+The distinctive demographic, socio-economic, and healthcare characteristics of the southern district of Santiago provide an opportune context for this study. 
+
+The collaborative effort between the investigator and the Management and Networks Department (MND) team of the Southern Metropolitan Public Health Service (SMPHS) has proven instrumental in gaining access to diagnosis and treatment datasets. The MND team, responsible for supervising the disease's care process, has recognized the significance of advancing healthcare research, particularly in understanding and improving the CRC care process. By facilitating access to datasets and information of patient records, treatment pathways, and outcomes, this collaboration ensures a robust foundation for data-driven analysis.
+
+Moreover, the involvement of the MND team enables the incorporation of vital medical information, enhancing the study with nuanced details about patient care and outcomes. This partnership not only highlights the commitment to transparency and information sharing but also emphasizes the collaborative spirit essential for advancing our understanding of complex healthcare processes. The data provided by the government served as a foundational element, enabling the investigator to explore, analyze, and derive insights that can potentially inform evidence-based decision-making and enhance the overall efficiency of CRC care in the SMPHS.
+
+\section{Goal of this Study}
+\subsection*{Process Discovery}
+
+While Operations Management has historically provided tools for process analysis, the digitalization of healthcare processes in recent times has brought forth an inmense amount of data from these intricate workflows. By utilizing advanced tools from Machine Learning, particularly Process Mining, there's a promising approach to analyze and enhance complex processes, as suggested by \citeA{van_der_aalst_process_2004}.
+
+This thesis will examine the CRC patient care process using Process Mining. This emerging field allows us to extract insights about a process from past data, presenting graphical representations of activities, performance indicators, and an overview of the entire process. Additionally, it helps identify relationships between processes and resources, temporal factors, and other variables, revealing opportunities for improvement as highlighted by \citeA{van_der_aalst_process_2012}.
+
+Using Process Mining, a data-driven approach for analyzing and visualizing real-world processes, our goal is to reveal hidden patterns, pinpoint bottlenecks, and expose inefficiencies in the CRC care pathway. This investigation goes beyond academic curiosity; it seeks to guide evidence-based decision-making, streamline healthcare processes, and enhance patient care and outcomes.
+
+\subsection*{Process Improvement}
+
+By integrating insights from Process Mining with medical expertise, we acknowledge the importance of merging data-driven knowledge with clinical experience. Through close collaboration with healthcare professionals, our objective is to bridge the gap between empirical data analysis and clinical insight. This collaborative approach aims to establish a comprehensive framework that not only identifies operational inefficiencies but also considers the nuanced aspects of patient care and medical decision-making. This ensures that the proposed enhancements align effectively with the complex dynamics of CRC management in the southern district of Santiago.
+
+Recognizing that process improvement suggestions must be practically implementable, we propose the use of Computational Simulation as a methodology to validate and assess the identified enhancements. Simulation, a potent tool successfully employed in healthcare system management \cite{zhang_application_2018}, allows the study of a system without real-world intervention. The results derived from simulation outcomes are expected to bolster the recommendations for implementing the proposed improvements.
+
+Throughout this thesis, the complete diagnosis and treatment process of CRC will be examined. The combined use of Process Mining and simulation techniques aims not only to enrich the academic understanding of CRC management but also to provide tangible, evidence-based recommendations for optimizing healthcare delivery in the southern district of Santiago. Moreover, the outcomes of this study are anticipated to offer a valuable blueprint for healthcare systems globally, emphasizing the importance of an integrated approach for process analysis and improvement.
+
+\section{Scope and Limitations of this Study}
+
+This section provides a detailed overview of the scope of our study, encompassing the various factors that shape it. Our goal is to shed light on the complexities and uncertainties of our investigation with transparency and rigor, facilitating a deeper understanding of the challenges and opportunities in addressing CRC care dynamics.
+
+\subsection*{Colorectal Cancer's Complexity}
+
+This study adopts a simplified approach to comprehend colorectal cancer, aimed at streamlining the analysis process. Instead of exploring the numerous pathways from suspicion to treatment, we concentrate on essential stages in the patient journey, evaluating performance metrics for each stage. Nevertheless, this simplified perspective might not capture the detailed nuances of individual patient experiences.
+
+Additionally, our examination does not account for the allocation and utilization of resources beyond monetary costs. The intricate management of human and material resources within healthcare systems is crucial and complex, representing a significant aspect that demands attention. By disregarding these complexities, our study may provide an incomplete understanding of the challenges involved in CRC care.
+
+Furthermore, while our study offers recommendations for improving CRC care, it does not provide an implementation plan. Implementing these recommendations effectively would require careful planning and execution, considering various logistical, organizational, and operational factors. Therefore, while our suggestions offer valuable insights, translating them into actionable strategies demands further detailed consideration and planning.
+
+\subsection*{Examining Real-World Data}
+
+This study heavily relies on government data from the public healthcare system to gain insights, as it was the best source available. However, it's crucial to acknowledge the inherent limitations and potential biases associated with this data source. 
+
+Firstly, the data may not offer a comprehensive overview of the entire diagnostic and treatment process for CRC patients. Certain critical aspects of patient care, such as individual variations in symptom presentation, treatment decisions, or follow-up protocols, are not fully captured in the datasets. This results in gaps in our depiction of the complete journey that CRC patients undergo within the healthcare system.
+
+Secondly, the selected time frame for data collection and the subsequent preprocessing steps play crucial roles in shaping the quality and reliability of the dataset. The selected timeframe for data collection might not fully capture the diverse nuances and fluctuations within the healthcare system, resulting in an incomplete depiction of CRC diagnosis and treatment dynamics. 
+
+Thirdly, while preprocessing data is vital for enhancing its quality and usability, it can unintentionally modify its original content and introduce biases or inaccuracies. These factors underscore the importance of meticulous scrutiny and validation when interpreting results derived from the analyzed dataset.
+
+\subsection*{Simulation as a Tool}
+
+Simulation is a crucial tool in our study, allowing us to explore the intricacies of CRC care within a controlled environment. However, simulations have their limitations. The complexity of CRC's natural history was simplified, and we drew data from diverse sources for both natural history and demographics. It's important to acknowledge these factors as we interpret our results. While simulations offer valuable insights, it's essential to complement our findings with real-world observations to ensure a comprehensive understanding.
+
+For a detailed exploration of the limitations and challenges encountered during the simulation process, refer to section \ref{sec:limitation_and_challenges} of this thesis.
+
+\section{Hypothesis}
+
+Through a comprehensive analysis of the diagnostic and treatment processes of colorectal cancer care, supported by Process Mining techniques, we can identify key challenges and propose solutions within the Southern Metropolitan Public Healthcare Service. By utilizing simulation, we aim to predict the impact of these enhancements, ensuring an evidence-based approach to optimizing colorectal cancer care.
+
+\section{Thesis Structure}
+
+\begin{itemize}
+
+    \item {\hyperref[chapter:literature_review]{Literature Review}: This section provides a comprehensive analysis and synthesis of existing research relevant to the study's topics.}
+
+    \item {\hyperref[chapter:methodology]{Methodology}: This section outlines the research approach and techniques employed in the study, including process discovery and analysis.}
+
+    \item {\hyperref[chapter:simulation]{Simulation}: This section details the construction and execution of the simulation model used to analyze CRC care screening dynamics.}
+
+    \item {\hyperref[chapter:results]{Results}: In this section the findings and outcomes of the simulation experiments are presented and analyzed.}
+
+    \item {\hyperref[chapter:conclusions]{Conclussions and Discussion}: This section summarizes the key findings of the study, discusses their implications, and offers recommendations for future research or practice.}
+
+\end{itemize}

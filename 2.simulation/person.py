@@ -32,15 +32,15 @@ cancer_stage_probability = {
 for row in ccr_age_risk.iterrows():
     start_year = row[1]['Start Year']
     end_year = row[1]['End Year']
-    casos = row[1]['Case Count']
-    if casos == 'Data not presented':
-        casos = 0
-    if casos == '12933':
+    cases = row[1]['Case Count']
+    if cases == 'Data not presented':
+        cases = 0
+    if cases == '12933':
         start_year = 85
         end_year = 120
 
-    casos = int(casos)
-    ccr_age_risk_list.append([start_year, end_year, casos])
+    cases = int(cases)
+    ccr_age_risk_list.append([start_year, end_year, cases])
 ccr_age_risk_list.pop(0)
 
 
@@ -49,8 +49,9 @@ ccr_age_risk_list.pop(0)
 
 class Person():
 
-    def __init__(self, age, year_of_inscription, adherence_percentage, counter, prevalence,):
+    def __init__(self, age: int, year_of_inscription: int, adherence_percentage: float, counter: int, prevalence: float) -> None:
         seed(counter)
+        np.random.seed(counter % (2**31))
         self.alive = True
         self.age = int(age)
         self.year_of_birth = int(year_of_inscription)-self.age
@@ -59,31 +60,32 @@ class Person():
         self.detectable_cancer = False
         self.treated_cancer = False
         self.screenable = False
-        self.prueba = False
+        self.debug_flag = False
+        self.cancer_determined_death = False
         self.counter = counter
         if uniform(0,1) < 0.5:
             self.male = True
 
-        # Se genera la age de su muerte
+        # Generate the age of natural death
         self.simulate_age_of_natural_death()
         simulate_age_of_death_attempts = 0
         
 
-        # Se genera la probabilidad de ser tamizable
+        # Generate the probability of being screenable
         self.screenable = False
         if uniform(0,1) < adherence_percentage:
             self.screenable = True
         
-        # Se genera la probabilidad de tener cancer
+        # Generate the probability of developing cancer
         if uniform(0,1) < prevalence:
             self.simulate_cancer_history()
         #if self.will_develop_cancer:
         #    print('Person: ', self.counter, '\nScreenable', self.screenable, '\nAge of Death', self.age_of_death, '\nAge of Screnable Cancer', self.age_of_screenable_cancer, '\nAge of Symptomatic Cancer', self.age_of_symptomatic_cancer, '\nAge', self.age, '\n*******************')
 
-    def die(self):
+    def die(self) -> None:
         self.alive = False
 
-    def simulate_age_of_natural_death(self):
+    def simulate_age_of_natural_death(self) -> None:
         if self.year_of_birth > 2095:
             media = 91-self.age
         elif self.male:
@@ -100,8 +102,9 @@ class Person():
         self.age_of_death = round(self.age + expected_years_left)
         if self.age_of_death > 120:
             self.age_of_death = 120
+        self.natural_age_of_death = self.age_of_death
         
-    def simulate_cancer_history(self):
+    def simulate_cancer_history(self) -> None:
         # Booleans to manage the cancer history
         self.will_develop_cancer = True
         self.detectable_cancer = False
@@ -111,7 +114,7 @@ class Person():
         self.asymptomatic_cancer_stage = choices(['I', 'II', 'III', 'IV'], weights=cancer_stage_probability['asymptomatic'])[0]
         self.symptomatic_cancer_stage = choices(['I', 'II', 'III', 'IV'], weights=cancer_stage_probability['symptomatic'])[0]
 
-        # Define age of cancer symptomatic cancer
+        # Define age of symptomatic cancer
         age_interval_of_cancer = choices(ccr_age_risk_list, weights=[item[2] for item in ccr_age_risk_list])[0]
         self.age_of_symptomatic_cancer = randint(age_interval_of_cancer[0], age_interval_of_cancer[1])
         
@@ -126,7 +129,8 @@ class Person():
                 preclinical_sojourn_time = round(np.random.normal(i[2], (i[4]-i[2])/2))
         self.age_of_screenable_cancer = self.age_of_symptomatic_cancer - preclinical_sojourn_time
 
-        # Define age of death
+        # Define age of death based on cancer stage
+        self.cancer_determined_death = True
         if self.male:
             self.age_of_death = round(self.age_of_symptomatic_cancer + cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
         else:
@@ -140,17 +144,17 @@ class Person():
         if self.age > self.age_of_death:
             self.age = randint(0, self.age_of_death)
         
-        # This person already had his cancer detected and treated
+        # This person already had their cancer detected and treated
         if self.age > self.age_of_symptomatic_cancer:
             self.treat_cancer()
-            self.prueba = True
+            self.debug_flag = True
         
         if self.age_of_death > 120:
             self.age_of_death = 120
         
 
     
-    def asymptomatic_screening(self):
+    def asymptomatic_screening(self) -> tuple[int, int, int, int]:
         year_of_birth = self.year_of_birth
         if year_of_birth > 2095:
             year_of_birth = 2095
@@ -165,12 +169,12 @@ class Person():
                 cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] 
                 - (cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
             )
-            #Asymptomatic DALY
+            # Asymptomatic DALY
             asymptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             asymptomatic_years_lost = male_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['male'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             asymptomatic_daly = (asymptomatic_disability_years_lost * 0.288) + asymptomatic_years_lost
 
-            #Symptomatic DALY
+            # Symptomatic DALY
             symptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             symptomatic_years_lost = male_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['male'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             symptomatic_daly = (symptomatic_disability_years_lost * 0.288) + symptomatic_years_lost
@@ -184,12 +188,12 @@ class Person():
                 - (cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer])
             , 3)
 
-            #Asymptomatic DALY
+            # Asymptomatic DALY
             asymptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             asymptomatic_years_lost = female_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['female'][self.asymptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             asymptomatic_daly = (asymptomatic_disability_years_lost * 0.288) + asymptomatic_years_lost
 
-            #Symptomatic DALY
+            # Symptomatic DALY
             symptomatic_disability_years_lost = cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['DFLE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             symptomatic_years_lost = female_life_expectancy_dict[year_of_birth][self.age_of_symptomatic_cancer] - cancer_life_expectancy_by_stage_and_age['LE']['female'][self.symptomatic_cancer_stage][self.age_of_symptomatic_cancer]
             symptomatic_daly = (symptomatic_disability_years_lost * 0.288) + symptomatic_years_lost
@@ -197,22 +201,29 @@ class Person():
         daly = round(symptomatic_daly - asymptomatic_daly)
         #print('male', str(self.male), '\nyears gained', str(years_gained), '\ndisability years difference', str(disability_years_difference), '\nsymptomatic daly', str(symptomatic_daly), '\nasymptomatic daly', str(asymptomatic_daly), '\ndaly', str(daly) + '\n*******************')
         return years_gained, healthy_years_gained, disability_free_years_gained, daly
-    def treat_cancer(self):
+    def treat_cancer(self) -> None:
         self.treated_cancer = True
         self.will_develop_cancer = False
         self.detectable_cancer = False
-        
+
+    def revert_to_natural_death(self) -> None:
+        """Revert death age to pre-cancer natural death (used after polypectomy)."""
+        self.age_of_death = self.natural_age_of_death
+        self.cancer_determined_death = False
+        self.will_develop_cancer = False
+        self.detectable_cancer = False
+        self.treated_cancer = True
 
 
-def probando_generador_cancer():
-    intervalo_de_edad = choices(ccr_age_risk_list, weights=[item[2] for item in ccr_age_risk_list])[0]
-    age_of_symptomatic_cancer = randint(intervalo_de_edad[0], intervalo_de_edad[1])
+def generate_random_cancer_age() -> int:
+    age_interval = choices(ccr_age_risk_list, weights=[item[2] for item in ccr_age_risk_list])[0]
+    age_of_symptomatic_cancer = randint(age_interval[0], age_interval[1])
     return age_of_symptomatic_cancer
 
-def test():
+def test() -> None:
     cancer_list = []
     for i in range(10000):
-        cancer_list.append(probando_generador_cancer())
+        cancer_list.append(generate_random_cancer_age())
 
     cancer_list_85 = [i for i in cancer_list if i >= 85]
     cancer_list_under_50 = [i for i in cancer_list if i < 50]

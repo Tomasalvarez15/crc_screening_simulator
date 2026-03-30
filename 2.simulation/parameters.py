@@ -1,6 +1,6 @@
 
 
-# Pureba optimista
+# Optimistic test
 #FIT_SPECIFICITY = 0.96
 
 
@@ -9,21 +9,19 @@ SEED = 3000
 
 
 # 2. Define the cost of cancer treatment by stage
-# Valores en Euros obtenidos de https://pubmed.ncbi.nlm.nih.gov/28189254/
-# Valor de CLP el 6 de enero 2017: 1 EUR = 702.14 CLP
-# Valores de inflacion obtenidos de https://es.statista.com/estadisticas/1189953/tasa-de-inflacion-chile/ 
-# Inflacion desde 2017 hasta 2023
-valor_euro_2017 = 702.14
+# Values in Euros obtained from https://pubmed.ncbi.nlm.nih.gov/28189254/
+# CLP value on January 6, 2017: 1 EUR = 702.14 CLP
+# Inflation values obtained from https://es.statista.com/estadisticas/1189953/tasa-de-inflacion-chile/ 
+# Inflation from 2017 to 2023
+EUR_VALUE_2017 = 702.14
 inflation2017_2023 = 1.0218 * 1.0232 * 1.00225 * 1.0304 * 1.0452 * 1.1165
-conversion = valor_euro_2017 * inflation2017_2023
-print('Inflacion 2017-2023:',inflation2017_2023)
+conversion = EUR_VALUE_2017 * inflation2017_2023
 CANCER_TREATMENT_COSTS = {
     'I': round(8644 * conversion),
     'II': round(12765.2 * conversion),
     'III': round(13075.2 * conversion),
     'IV': round(51333.5 * conversion)
 }
-print('Cancer Treatment Costs', CANCER_TREATMENT_COSTS)
 
 # 3. Define the screening frequency
 SCREENING_FREQUENCY = ['Biennial', 50, 75, 2, 0]
@@ -31,7 +29,7 @@ SCREENING_FREQUENCY = ['Biennial', 50, 75, 2, 0]
 
 
 # 4. Define the cost of colonoscopy
-# Valor de la colonoscopia obtenido de https://www.ucchristus.cl/docs/default-source/pdf/aranceles-csc.pdf 
+# Colonoscopy cost obtained from https://www.ucchristus.cl/docs/default-source/pdf/aranceles-csc.pdf 
 
 #COLONOSCOPY_COST = 80560
 
@@ -68,3 +66,12 @@ FIT_SENSITIVITY = 0.79
 
 # 10. Define FIT specificity
 FIT_SPECIFICITY = 0.94
+
+# 11. Polypectomy prevention rate
+# ~52% of screening-detected cancers are caught as removable polyps
+# Source: Zauber et al. NEJM 2012
+POLYPECTOMY_PREVENTION_RATE = 0.52
+
+if __name__ == '__main__':
+    print('Inflation 2017-2023:', inflation2017_2023)
+    print('Cancer Treatment Costs', CANCER_TREATMENT_COSTS)

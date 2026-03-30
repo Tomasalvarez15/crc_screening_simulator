@@ -5,40 +5,40 @@ cancer_stage_probability = {
 }
 
 
-# Make two graph plots one with the symptomatic and the other with the asymptomatic stage percentages
+def main():
+    from matplotlib import pyplot as plt
+    import numpy as np
 
-# Do not show the y axis labels and put the percentage in the bars
+    # Data
+    labels = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
+    symptomatic = cancer_stage_probability['symptomatic']
+    asymptomatic = cancer_stage_probability['asymptomatic']
 
-from matplotlib import pyplot as plt
-import numpy as np
+    plt, ax = plt.subplots(1, 2, figsize=(10, 5))
 
-# Data
-labels = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
-symptomatic = cancer_stage_probability['symptomatic']
-asymptomatic = cancer_stage_probability['asymptomatic']
+    # Plot
+    ax[1].bar(labels, symptomatic, color='#ff7f0e')
+    ax[0].bar(labels, asymptomatic, color='#1f77b4')
 
-plt, ax = plt.subplots(1, 2, figsize=(10, 5))
+    # Add title and labels
+    ax[1].set_title('Symptomatic\n(Base Scenario)')
+    ax[0].set_title('Asymptomatic\n(Optimum Scenario)')
+    ax[1].set_ylabel('Stage Probability')
+    ax[0].set_ylabel('Stage Probability')
+    ax[1].set_xlabel('Cancer Stage')
+    ax[0].set_xlabel('Cancer Stage')
 
-# Plot
-ax[1].bar(labels, symptomatic, color='#ff7f0e')
-ax[0].bar(labels, asymptomatic, color='#1f77b4')
+    # Add percentage to the bars
+    for i in range(4):
+        ax[1].text(i, symptomatic[i], f'{symptomatic[i]*100:.0f}%', ha='center', va='bottom')
+        ax[0].text(i, asymptomatic[i], f'{asymptomatic[i]*100:.0f}%', ha='center', va='bottom')
 
-# Add title and labels
-ax[1].set_title('Symptomatic\n(Base Scenario)')
-ax[0].set_title('Asymptomatic\n(Optimum Scenario)')
-ax[1].set_ylabel('Stage Probability')
-ax[0].set_ylabel('Stage Probability')
-ax[1].set_xlabel('Cancer Stage')
-ax[0].set_xlabel('Cancer Stage')
+    # Hide the y axis labels
+    ax[1].tick_params(axis='y', which='both', left=False, labelleft=False)
+    ax[0].tick_params(axis='y', which='both', left=False, labelleft=False)
 
-# Add percentage to the bars
-for i in range(4):
-    ax[1].text(i, symptomatic[i], f'{symptomatic[i]*100:.0f}%', ha='center', va='bottom')
-    ax[0].text(i, asymptomatic[i], f'{asymptomatic[i]*100:.0f}%', ha='center', va='bottom')
-
-# Hide the y axis labels
-ax[1].tick_params(axis='y', which='both', left=False, labelleft=False)
-ax[0].tick_params(axis='y', which='both', left=False, labelleft=False)
+    plt.savefig('cancer_stage_probability.png')
 
 
-plt.savefig('cancer_stage_probability.png')
+if __name__ == '__main__':
+    main()

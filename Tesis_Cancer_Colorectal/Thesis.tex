@@ -1,0 +1,265 @@
+% Select one class
+%\documentclass{pucthesis}		% For DVI
+\documentclass[pdftex]{pucthesis}	% For pdfLaTeX
+%\documentclass[spanish]{pucthesis}		% For DVI, in spanish
+% \documentclass[pdftex,spanish]{pucthesis}	% For pdfLaTeX, in spanish
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Nota: si usas español, algunos nombres      %
+%      debes cambiarlos manualmente en este     %
+%        documento. En teoría, nunca deberías       %
+%           modificar el archivo pucthesis.cls              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%
+%   Packages	 %
+%%%%%%%%%
+\usepackage{subcaption}
+
+% Floats
+\usepackage{graphicx}
+\usepackage{float}
+\floatstyle{boxed}
+\restylefloat{figure}
+\usepackage{subfigure}
+\usepackage{color}
+\usepackage{bm}
+
+% Math packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+% Closest font to Times New Roman
+\usepackage{times}
+
+% To make pretty tables
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\definecolor{lightgreen}{HTML}{90EE90}
+\definecolor{lightred}{HTML}{FFA07A}
+
+% For pretty boxes
+\usepackage{tcolorbox}
+
+% To avoid underfull errors in the bibliography
+\usepackage{etoolbox}
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
+
+% To make cites and references
+\usepackage[hidelinks,pdfusetitle,pdfdisplaydoctitle]{hyperref}
+\usepackage[notocbib]{apacite} 
+\usepackage{doi}
+\renewcommand{\doitext}{}
+
+% To make algorithms
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% To enumerate multiple equations beyond .z item
+\usepackage{alphalph}
+%--------- NEW ENVIRONMENTS --------- You are free to remove or use it
+\newtheorem{definition}{\bf Definition}[chapter]
+\newtheorem{property}{Property}[chapter]
+\newtheorem{claim}{Claim}[chapter]
+\newtheorem{lemma}{\bf Lemma}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{theorem}{\noindent \bf Theorem}[chapter]
+\newtheorem{corollary}{\bf Corollary}[chapter]
+\newtheorem{pf}{Proof}[chapter]
+\newtheorem{example}{\bf Example}[chapter]
+\newtheorem{remark}{Remark}[chapter]
+% Para quebrar ecuaciones:
+\allowdisplaybreaks
+% Long tables:
+\usepackage{longtable}
+% En caso de que el título sea muy largo, se puede ajustar el espacio
+% antes y después de este en las dos primeras páginas para que quede centrado.
+
+\usepackage{geometry}
+\makeatletter
+ \setlength{\beftitle}{40\p@\@plus24\p@}
+ \setlength{\afttitle}{40\p@}
+
+ \newalphalph{\aalphalph}[mult]{\alphalph@alph}{26}
+\newcommand{\alphalphval}[1]{%
+  \@ifundefined{c@#1}{% check first if #1 is a counter (\c@#1)
+    \aalphalph{#1}% No, it's most likely the direct value
+  }{%
+    \aalphalph{\value{#1}}% It's a counter, so use \value{#1}
+  }
+}
+\makeatother
+
+%Reinicia el orden de las letras en ecuaciones
+\usepackage{chngcntr}
+\counterwithin{equation}{section}
+% Esto es para iterar en las letras cuando se llaman las ecuaciones
+\AtBeginEnvironment{align}{
+  \let\alph\alphalphval
+}
+\renewcommand{\theequation}{\thesection.\alphalphval{equation}}
+
+\usepackage{xstring}
+\renewcommand{\eqref}[1]{\textup{\ref{#1}}\hspace{-0.1cm}}
+
+% Modificar el subsubsection para que se agregue una letra en vez de un número
+\renewcommand{\thesubsubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}.\alph{subsubsection}}
+
+\begin{document}
+
+\mdate{Month Day, Year}         % date manuscript changed
+\version{1}                                     % manuscript version #
+    
+\title[COLORECTAL CANCER IN CHILE: PROCESS DISCOVERY AND ENHANCEMENT USING PROCESS MINING AND SIMULATION]
+   {\bf COLORECTAL CANCER IN CHILE: PROCESS DISCOVERY AND ENHANCEMENT USING PROCESS MINING AND SIMULATION}       
+\author[Tomás Álvarez Abusleme]{Tomás Joaquín Álvarez Abusleme}
+
+\address{Escuela de Ingenier\'ia\\
+                   Pontificia Universidad Cat\'olica de Chile\\ 
+                   Vicu\~na Mackenna 4860\\
+                  Santiago, Chile\\
+                  {\it Tel.\/} : 56 (2) 354-2000}
+\email{toalvarez@uc.cl}
+
+\facultyto    {The School of Engineering}
+%\department   {}
+\faculty                             {Faculty of Engineering}
+\degree                  {Magíster en Ciencias de la Ingeniería}  %   {Mag\'ister en Ciencias de la Ingenier\'ia}  %        
+                                 % or {Doctor in Engineering Sciences}    % {Doctor en Ciencias de la Ingenier\'ia}
+\advisor                            {JORGE VERA ANDREO}
+\committeememberA{Sergio Maturana}
+\guestmemberA            {Alejandro Cataldo}
+\ogrsmember                 {Patricio De La Cuadra Banderas}
+\guestmemberB                 {Jaime Miranda}
+\subject{Industrial Engineering}
+\date{December 2024}
+\copyrightname{Tomás Álvarez Abusleme}
+\copyrightyear{MMXXIII}
+\dedication{To Camilo Lopez, who would have liked to see this study completed}
+
+%%%%%%%%%%%%%%%%%%%%
+%       PRELIMINARIES                              %
+%----------------------------------------------------%
+%      page i & ii: cover page                   %
+%      page iii: dedication                         %
+%%%%%%%%%%%%%%%%%%%%
+
+\NoChapterPageNumber
+\pagenumbering{roman}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%
+%   EXTRA PAGES                                     %
+%----------------------------------------------------%
+%      page --: not used                             %
+%%%%%%%%%%%%%%%%%%%%
+
+%\newpage
+%\thispagestyle{empty}
+
+%----------------------------------------------------------------------%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%      page v: ACKNOWLEDGEMENTS                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\phantomsection \label{acknowledgements} % Comment if hyperref is unused
+\chapter*{ACKNOWLEDGEMENTS}           
+\input{./chapters/acknowledgments.tex}
+
+\cleardoublepage
+
+%----------------------------------------------------------------------%
+
+%%%%%%%%%%%%%%%%%%
+%          page v & up ---                      %
+%            Table of contents              %
+%            List of figures                     %
+%            List of tables                      %
+%%%%%%%%%%%%%%%%%%
+
+\pdfbookmark{\contentsname}{toc}
+\tableofcontents
+\phantomsection \label{listoffigures}
+\listoffigures
+\phantomsection \label{listoftables}
+\listoftables
+\cleardoublepage
+
+%----------------------------------------------------------------------%
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%      page x & xi: ABSTRACT - RESUMEN        %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\phantomsection \label{abstract}
+\chapter*{ABSTRACT}
+\input{./chapters/abstract.tex}
+\cleardoublepage
+
+\phantomsection \label{resumen}
+\chapter*{RESUMEN}
+\input{./chapters/resumen.tex}
+\cleardoublepage
+
+%%%%%%%%%%%%%
+%   TEXT  OF THESIS     %
+%%%%%%%%%%%%%
+
+\pagenumbering{arabic}
+
+\newgeometry{left=4cm,top=4cm, right = 2.5cm}
+
+% By default, LaTeX uses margins equals to 25mm (top and odd)
+% -25mm + 40mm = 15mm
+% Top
+\topmargin -25mm
+\headheight 20mm
+\headsep 20mm
+% Left side
+\oddsidemargin 15mm
+% \hoffset 15mm
+
+\chapter[Introduction]{Introduction}
+\label{chapter:introduction}
+\input{./chapters/1.introduction.tex}
+
+\chapter[Literature Review]{Literature Review}
+\label{chapter:literature_review}
+\input{./chapters/2.literature_review.tex}
+
+\chapter[Methodology]{Methodology}
+\label{chapter:methodology}
+\input{./chapters/3.methodology.tex}
+
+\chapter[Simulation]{Simulation}
+\label{chapter:simulation}
+\input{./chapters/4.simulation.tex}
+
+\chapter[Results]{Results}
+\label{chapter:results}
+\input{./chapters/5.results.tex}
+
+\chapter[Conlusions and Discussion]{Conlussions and Discussion} 
+\label{chapter:conclusions}
+\input{./chapters/6.conclusions_and_discussion.tex}
+
+
+%%%%%%%%%%%%%
+%       REFERENCES        %
+%%%%%%%%%%%%%
+
+\cleardoublepage
+\phantomsection \label{references}
+\bibliographystyle{apacite}
+\renewcommand{\bibname}{REFERENCES}
+
+%%%% ACTIVAR SIGUIENTES 3 LINEAS SI POSTGRADO RECHAZA LA BIBLIOGRAFIA
+\setlength{\bibleftmargin}{0em}
+\setlength{\bibindent}{0em}
+\setlength{\bibitemsep}{1em}
+
+\bibliography{Thesis}
+\end{document}
